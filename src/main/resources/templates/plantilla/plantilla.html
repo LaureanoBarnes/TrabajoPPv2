@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>PlantillaTh</title>
+</head>
+<body>
+<header th:fragment="encabezado">
+<h1 th:text="#{pagina.titulo}">Control Consumidor</h1>
+</header>
+<footer th:fragment="piepagina">
+    <p th:text="#{pagina.pie-de-pagina}">Creado por Laureano Barnes, Federico Drab, Francisco Barnes</a> </p>
+    <form method="POST" th:action="@{logout}">
+        <b>User: </b> <span sec:authentication="name">Usuario que ingreso</span>
+        <br> <b>Roles: </b> <span sec:authentication="principal.authorities">Rol</span> -
+    <a href="#" onclick="this.parentNode.submit();">Logout</a>
+    </form>
+</footer>
+</body>
+</html>

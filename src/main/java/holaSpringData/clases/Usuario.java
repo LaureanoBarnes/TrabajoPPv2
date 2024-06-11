@@ -22,6 +22,5 @@ public class Usuario implements Serializable{
     private String contrasena;
     @ManyToOne
     @JoinColumn(name="rol_id_rol")
-
     private Rol unRol;
 }

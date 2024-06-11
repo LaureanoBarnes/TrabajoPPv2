@@ -30,7 +30,10 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     @Override
     @Transactional
     public void salvar(Usuario usuario) {
-        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        if (!usuario.getContrasena().startsWith("{bcrypt}")) {
+            String encodedPassword = passwordEncoder.encode(usuario.getContrasena());
+            usuario.setContrasena(encodedPassword);
+        }
         usuarioDao.save(usuario);
     }
 

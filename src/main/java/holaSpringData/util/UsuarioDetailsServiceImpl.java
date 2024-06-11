@@ -4,6 +4,7 @@ package holaSpringData.util;
 
 import holaSpringData.clases.Usuario;
 import holaSpringData.dao.UsuarioDao;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UsuarioDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -21,6 +23,7 @@ public class UsuarioDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("buscando user "+ username);
         Usuario usuario = usuarioDao.findByNomusuario(username);
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuario no encontrado: " + username);

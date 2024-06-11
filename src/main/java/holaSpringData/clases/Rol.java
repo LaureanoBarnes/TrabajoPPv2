@@ -13,6 +13,6 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_rol;
     private String nombre;
-    @OneToMany (mappedBy="unRol")
-    private List<Usuario> listaUsuarios;
+//    @OneToMany (mappedBy="unRol")
+//    private List<Usuario> listaUsuarios;
 }

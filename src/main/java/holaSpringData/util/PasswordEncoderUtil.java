@@ -22,16 +22,4 @@ public class PasswordEncoderUtil {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-
-    @PostConstruct
-    public void encodePasswords() {
-        List<Usuario> usuarios = (List<Usuario>) usuarioDao.findAll();
-        for (Usuario usuario : usuarios) {
-            if (!usuario.getContrasena().startsWith("{bcrypt}")) {
-                String encodedPassword = passwordEncoder.encode(usuario.getContrasena());
-                usuario.setContrasena(encodedPassword);
-                usuarioDao.save(usuario);
-            }
-        }
-    }
 }

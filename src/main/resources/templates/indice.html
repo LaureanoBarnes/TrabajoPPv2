@@ -12,10 +12,9 @@
 <body>
 <header th:replace="plantilla/plantilla :: encabezado"></header>
 
-<a sec:authorize="hasRole('ROLE_ADMIN')" th:href ="@{/anexar}"> [[#{individuo.anexar}]]</a>
+<!--<a sec:authorize="hasRole('ROLE_ADMIN')" th:href ="@{/anexar}"> [[#{individuo.anexar}]]</a>-->
 <div th:if="${individuos.size()==0}">
     <p> [[#{individuo.lista-sin-info}]] </p></div>
-
 <div th:if="${individuos.size()>0}">
     <table border="2">
         <tr>
@@ -25,7 +24,7 @@
             <th>[[#{individuo.edad}]]</th>
             <th>[[#{individuo.correo}]]</th>
             <th>[[#{individuo.telefono}]]</th>
-            <th sec:authorize="hasRole('ROLE_ADMIN')">[[#{boton.cambiar}]]</th>
+<!--            <th sec:authorize="hasRole('ROLE_ADMIN')">[[#{boton.cambiar}]]</th>-->
             <th sec:authorize="hasRole('ROLE_ADMIN')">[[#{boton.borrar}]]</th>
         </tr>
         <tr th:each="individuo : ${individuos}">
@@ -34,8 +33,8 @@
             <td th:text="${individuo.edad}">Muestra Edad</td>
             <td th:text="${individuo.correo}">Muestra Correo</td>
             <td th:text="${individuo.telefono}">Muestra Telefono</td>
-            <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/cambiar/} + ${individuo.id_individuo}"
-                                                         th:text="Cambiar"/></td>
+<!--            <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/cambiar/} + ${individuo.id_individuo}"-->
+<!--                                                         th:text="Cambiar"/></td>-->
             <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/borrar(id_individuo=${individuo.id_individuo})}"
                                                          th:text="Borrar"/></td>
         </tr>

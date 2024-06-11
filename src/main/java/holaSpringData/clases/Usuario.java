@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Usuario implements Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_usuario;
 
     @Column(unique = true)
@@ -22,5 +22,6 @@ public class Usuario implements Serializable{
     private String contrasena;
     @ManyToOne
     @JoinColumn(name="rol_id_rol")
+
     private Rol unRol;
 }

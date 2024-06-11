@@ -67,22 +67,24 @@ public class ControladorRest {
         if (errorIndividuo.hasErrors() || errorUsuario.hasErrors()) {
             return "cambiar";
         }
+
         Rol rol = rolServicio.localizarRol(rolNombre);
         usuario.setUnRol(rol);
+
         usuarioServicio.salvar(usuario);
 
         individuoServicio.salvar(individuo);
-        return "redirect:/";
+        return "redirect:/ingreso";
 
     }
 
-    @GetMapping("/cambiar/{id_individuo}")
-    public String cambiar(Individuo individuo, Model model) {
-        individuo = individuoServicio.localizarIndividuo(individuo);
-        model.addAttribute("individuo", individuo);
-        return "cambiar";
-
-    }
+//    @GetMapping("/cambiar/{id_individuo}")
+//    public String cambiar(Individuo individuo, Model model) {
+//        individuo = individuoServicio.localizarIndividuo(individuo);
+//        model.addAttribute("individuo", individuo);
+//        return "cambiar";
+//
+//    }
 
     @GetMapping("/borrar")
     public String borrar(Individuo individuo) {

@@ -2,7 +2,10 @@ package holaSpringData.servicio;
 
 import holaSpringData.clases.Usuario;
 import holaSpringData.dao.UsuarioDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,19 +15,22 @@ import java.util.List;
 @Service
 public class UsuarioServicioImpl implements UsuarioServicio{
 
-
     @Autowired
     private UsuarioDao usuarioDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
     public List<Usuario> listaUsuario() {
         return (List<Usuario>) usuarioDao.findAll();
+
     }
 
     @Override
     @Transactional
     public void salvar(Usuario usuario) {
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         usuarioDao.save(usuario);
     }
 
@@ -32,7 +38,6 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     @Transactional
     public void borrar(Usuario usuario) {
         usuarioDao.delete(usuario);
-
     }
 
     @Override

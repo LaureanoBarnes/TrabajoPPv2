@@ -34,7 +34,7 @@ public class ControladorRest {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
-
+    
     @Autowired
     private RolServicio rolServicio;
 

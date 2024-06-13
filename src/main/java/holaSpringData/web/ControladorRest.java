@@ -89,7 +89,7 @@ public class ControladorRest {
     @GetMapping("/borrar")
     public String borrar(Individuo individuo) {
         individuoServicio.borrar(individuo);
-        return "redirect:/";
+        return "redirect:/ingreso";
 
     }
 

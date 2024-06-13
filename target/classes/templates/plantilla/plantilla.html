@@ -15,7 +15,7 @@
     <form method="POST" th:action="@{logout}">
         <b>User: </b> <span sec:authentication="name">Usuario que ingreso</span>
         <br> <b>Roles: </b> <span sec:authentication="principal.authorities">Rol</span> -
-    <a href="#" onclick="this.parentNode.submit();">Logout</a>
+    <a href="/ingreso?logout" onclick="this.parentNode.submit();">Logout</a>
     </form>
 </footer>
 </body>

@@ -32,6 +32,12 @@ public class ConfSegurity {
                                 .loginPage("/ingreso")
                                 .permitAll()
                 )
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/ingreso?logout") // redirigir al login después de cerrar sesión
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID"))
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.accessDeniedPage("/errores/403"))
         ;

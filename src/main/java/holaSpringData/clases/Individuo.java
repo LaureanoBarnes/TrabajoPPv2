@@ -31,5 +31,8 @@ public class Individuo implements Serializable {
 
     private String telefono;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_usuario")
+    private Usuario unUsuario;
 
 }

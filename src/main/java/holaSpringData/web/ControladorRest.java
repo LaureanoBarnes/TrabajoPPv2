@@ -70,9 +70,9 @@ public class ControladorRest {
 
         Rol rol = rolServicio.localizarRol(rolNombre);
         usuario.setUnRol(rol);
-
         usuarioServicio.salvar(usuario);
 
+        individuo.setUnUsuario(usuario);
         individuoServicio.salvar(individuo);
         return "redirect:/ingreso";
 

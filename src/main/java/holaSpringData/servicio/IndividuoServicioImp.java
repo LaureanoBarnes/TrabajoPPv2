@@ -31,7 +31,7 @@ public class IndividuoServicioImp implements IndividuoServicio{
     @Override
     @Transactional
     public void borrar(Individuo individuo) {
-        individuoDao.delete(individuo);
+        individuoDao.deleteById(individuo.getId_individuo());
 
     }
 

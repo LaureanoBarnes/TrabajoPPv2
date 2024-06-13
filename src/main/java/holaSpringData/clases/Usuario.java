@@ -23,4 +23,5 @@ public class Usuario implements Serializable{
     @ManyToOne
     @JoinColumn(name="rol_id_rol")
     private Rol unRol;
+
 }

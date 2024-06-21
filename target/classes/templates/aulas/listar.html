@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Listar Aulas</title>
+</head>
+<body>
+<h1>Lista de Aulas</h1>
+<table>
+    <tbody>
+    <div th:if="${aulas.size() == 0}">
+        <p>No hay aulas disponibles.</p>
+    </div>
+    <div th:if="${aulas.size() > 0}">
+        <tr th:each="aula : ${aulas}">
+            <td th:text="${aula.nombreAula}">Nombre del Aula</td>
+            <td th:text="${aula.cursoAula}">Curso del Aula</td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                   th:href="@{/editar/{id_aula}(id_aula=${aula.id_aula})}">Editar</a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                   th:href="@{/eliminar/{id}(id=${aula.id_aula})}">Eliminar</a>
+                <form sec:authorize="hasRole('ROLE_USER')" th:if="${not #lists.contains(aula.usuarios, currentUser)}"
+                      th:action="@{/aula/{id_aula}/agregarUsuario(id_aula=${aula.id_aula})}"
+                      method="post" style="display:inline;">
+                    <input type="hidden" name="id_individuo"
+                           th:value="${currentUser.id_individuo}">
+                    <button type="submit">Unirse</button>
+                </form>
+                <a th:if="${#lists.contains(aula.usuarios, currentUser)
+                 or #lists.contains(aula.administradores, currentUser)}"
+                   th:href="@{/aula/{id_aula}(id_aula=${aula.id_aula})}">Entrar</a>
+            </td>
+        </tr>
+    </div>
+    </tbody>
+</table>
+<a href="#" th:href="@{/crear}"><button type="button">Crear Aula</button></a>
+<footer th:replace="~{plantilla/plantilla :: piepagina}"></footer>
+</body>
+</html>

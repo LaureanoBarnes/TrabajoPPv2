@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ver Aula</title>
+</head>
+<body>
+<h1>Aula: <span th:text="${aula.nombreAula}"></span></h1>
+<p>Curso: <span th:text="${aula.cursoAula}"></span></p>
+
+<h2>Administradores</h2>
+<ul>
+    <li th:each="admin : ${aula.administradores}">
+        <span th:text="${admin.nombre} + ' ' + ${admin.apellido} + ' (' + ${admin.correo} + ') - ' + ${admin.unUsuario.unRol.nombre}"></span>
+    </li>
+</ul>
+
+<h2>Usuarios</h2>
+<ul>
+    <li th:if="${aula.usuarios.size() == 0}">
+        <p>No hay usuarios en esta aula.</p>
+    </li>
+    <li th:each="user : ${aula.usuarios}">
+        <span th:text="${user.nombre} + ' ' + ${user.apellido} + ' (' + ${user.correo} + ') - ' + ${user.unUsuario.unRol.nombre}"></span>
+    </li>
+</ul>
+
+<!--<div th:if="${not #lists.contains(aula.usuarios, currentUser)}">-->
+<!--    <form th:action="@{/aula/{id_aula}/agregarUsuario(id_aula=${aula.id_aula})}" method="post" style="display:inline;">-->
+<!--        <input type="hidden" name="id_individuo" th:value="${currentUser.id_individuo}">-->
+<!--        <button type="submit">Unirse al Aula</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<div th:if="${#lists.contains(aula.usuarios, currentUser)}">
+    <p>Ya eres miembro de esta aula.</p>
+</div>
+
+<a href="/" th:href="@{/}">Volver a la lista de aulas</a>
+</body>
+</html>

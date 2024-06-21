@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Aula</title>
+</head>
+<body>
+<h1 th:text="${aula.id_aula} == null ? 'Crear Aula' : 'Editar Aula'"></h1>
+<form th:action="@{/guardar}" th:object="${aula}" method="post">
+    <input type="hidden" th:field="*{id_aula}" />
+    <label for="nombreAula">Nombre del Aula:</label>
+    <input type="text" id="nombreAula" th:field="*{nombreAula}" required>
+    <br>
+    <label for="cursoAula">Curso del Aula:</label>
+    <input type="text" id="cursoAula" th:field="*{cursoAula}" required>
+    <br>
+    <button type="submit" th:text="${aula.id_aula} == null ? 'Guardar' : 'Actualizar'"></button>
+    <a href="/"><button type="button">Cancelar</button></a>
+</form>
+</body>
+</html>

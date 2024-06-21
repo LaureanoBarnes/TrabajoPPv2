@@ -9,9 +9,6 @@ import holaSpringData.servicio.UsuarioServicio;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +24,7 @@ import java.util.List;
 @Slf4j
 
 
-public class ControladorRest {
+public class UserController {
 
     @Autowired
     private IndividuoServicio individuoServicio;
@@ -39,16 +36,16 @@ public class ControladorRest {
     private RolServicio rolServicio;
 
 
-    @GetMapping("/")
-    public String comienzo(Model model, @AuthenticationPrincipal User usuario) {
-        List<Individuo> individuos = individuoServicio.listaindividuos();
-
-
-        log.info("estoy ejecutando el controlador MVP");
-        log.info("El usuario que ingreso es: " + usuario);
-        model.addAttribute("individuos", individuos);
-        return "indice";
-    }
+//    @GetMapping("/")
+//    public String comienzo(Model model, @AuthenticationPrincipal User usuario) {
+//        List<Individuo> individuos = individuoServicio.listaindividuos();
+//
+//
+//        log.info("estoy ejecutando el controlador MVP");
+//        log.info("El usuario que ingreso es: " + usuario);
+//        model.addAttribute("individuos", individuos);
+//        return "indice";
+//    }
 
     @GetMapping("/anexar")
     public String anexar(Model model) {

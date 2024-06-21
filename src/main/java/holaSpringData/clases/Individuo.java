@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -34,5 +35,14 @@ public class Individuo implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_usuario")
     private Usuario unUsuario;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "aula_usuarios",
+            joinColumns = @JoinColumn(name = "individuo_id"),
+            inverseJoinColumns = @JoinColumn(name = "aula_id")
+    )
+    private List<Aula> aulas;
 
 }

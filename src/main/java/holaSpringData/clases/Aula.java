@@ -34,8 +34,7 @@ public class Aula implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "individuo_id")
     )
 
-    @ManyToMany(cascade = CascadeType.ALL)
-
+    @ManyToMany
     private List<Individuo> administradores;
 
 
@@ -44,7 +43,7 @@ public class Aula implements Serializable {
             joinColumns = @JoinColumn(name = "aula_id"),
             inverseJoinColumns = @JoinColumn(name = "individuo_id")
     )
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Individuo> usuarios;
 
 }

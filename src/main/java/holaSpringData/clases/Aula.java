@@ -1,6 +1,6 @@
 package holaSpringData.clases;
 
-import jakarta.annotation.PostConstruct;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

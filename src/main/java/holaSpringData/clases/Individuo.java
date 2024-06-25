@@ -25,7 +25,7 @@ public class Individuo implements Serializable {
     private String apellido;
 
     @NotEmpty
-    @Email
+    @Email(regexp = ".+@.+\\..+",message = "Email debe ser válido")
     private String correo;
     @NotEmpty
     private String edad;

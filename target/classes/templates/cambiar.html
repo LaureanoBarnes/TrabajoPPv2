@@ -119,7 +119,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
                             <input type="email" class="form-control" id="correo" th:field="*{correo}"
-                                   placeholder="Ingrese su Correo" required/>
+                                   placeholder="Ingrese su Correo" pattern=".+@.+\..+" required/>
                         </div>
                     </div>
                 </div>

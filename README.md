@@ -1,8 +1,6 @@
 <h3 align="center">Sistema y gestión de un aula virtual</h3>
 
 - 🔭 Actualmente trabajando en el **Aula Virtual**
-
-<h3 align="left">Connect with me:</h3>
 <p align="left">
 </p>
 

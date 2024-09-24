@@ -4,10 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Acceso Restringido</title>
+    <style>
+        div{
+            color: #dddddd;
+        }
+        button {
+            background-color: #ffeb3b;
+            border: none;
+            padding: 10px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            backdrop-filter: blur(5px);
+            color: var(--foreground);
+        }
+        content {
+            flex-grow: 1; /* Hace que el contenido principal ocupe el espacio restante */
+            padding: 20px;
+            background: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg') no-repeat center center;
+            background-size: cover;
+            margin-left: 250px; /* Deja espacio para la barra lateral */
+
+        }
+    </style>
 </head>
 <body>
-<div>Acceso Restringido.
+<div>
+    Acceso Restringido.
 No tienes acceso a esta pagina
-<a th:href="@{/}"> [[#{boton.retroceder}]]</a></div>
+    <button>
+<a th:href="@{/}"> [[#{boton.retroceder}]]</a>
+</button></div>
 </body>
 </html>

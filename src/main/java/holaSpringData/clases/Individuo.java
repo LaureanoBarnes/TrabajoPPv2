@@ -44,5 +44,4 @@ public class Individuo implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "aula_id")
     )
     private List<Aula> aulas;
-
 }

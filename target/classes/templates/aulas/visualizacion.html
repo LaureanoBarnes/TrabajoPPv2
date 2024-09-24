@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<style>
+    .alert {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .alert-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+</style>
 <head>
+
     <title>Ver Aula</title>
 </head>
 <body>
+
 <h1>Aula: <span th:text="${aula.nombreAula}"></span></h1>
 <p>Curso: <span th:text="${aula.cursoAula}"></span></p>
+
+
 
 <h2>Administradores</h2>
 <ul>
@@ -34,6 +60,30 @@
 <div th:if="${#lists.contains(aula.usuarios, currentUser)}">
     <p>Ya eres miembro de esta aula.</p>
 </div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+<h2>Subir archivo PDF</h2>
+<form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".pdf" required>
+    <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
+    <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
+    <button type="submit">Subir PDF</button>
+</form>
+<div th:if="${mensaje != null}" th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">
+    <p th:text="${mensaje}"></p>
+</div></div>
+
+<script>
+    // Espera 3 segundos y luego oculta el mensaje
+    setTimeout(function() {
+        var mensajeDiv = document.getElementById("mensaje");
+        if (mensajeDiv) {
+            mensajeDiv.style.opacity = '0';
+            setTimeout(function() {
+                mensajeDiv.style.display = 'none';
+            }, 500); // Tiempo adicional para que la transición se complete
+        }
+    }, 3000); // 3 segundos
+</script>
 
 <a href="/" th:href="@{/}">Volver a la lista de aulas</a>
 </body>

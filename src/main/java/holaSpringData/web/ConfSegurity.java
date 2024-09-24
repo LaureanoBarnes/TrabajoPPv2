@@ -21,9 +21,10 @@ public class ConfSegurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf-> csrf.disable())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/cambiar/**", "/borrar/**").hasRole("ADMIN")
+                                .requestMatchers("/cambiar/**", "/borrar/**", "/api/**", "/crear" ).hasRole("ADMIN")
                                 .requestMatchers("/anexar", "/salvar").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -35,7 +36,7 @@ public class ConfSegurity {
                 .logout(logout ->
                         logout
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/ingreso?logout") // redirigir al login después de cerrar sesión
+                                .logoutSuccessUrl("/ingreso") // redirigir al login después de cerrar sesión
                                 .invalidateHttpSession(true)
                                 .deleteCookies("JSESSIONID"))
                 .exceptionHandling(exceptionHandling ->

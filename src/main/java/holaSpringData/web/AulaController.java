@@ -4,6 +4,7 @@ import holaSpringData.clases.Aula;
 import holaSpringData.clases.Individuo;
 import holaSpringData.servicio.AulaServicio;
 import holaSpringData.servicio.IndividuoServicio;
+import holaSpringData.servicio.UsuarioAutenticacionServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -23,20 +24,26 @@ public class AulaController {
     @Autowired
     private IndividuoServicio individuoServicio;
 
+    @Autowired
+    private UsuarioAutenticacionServicio usuarioAutenticacionServicio;
+
 
     @GetMapping("/")
     public String listarAulas(Model model, @AuthenticationPrincipal User usuario) {
         var aulas = aulaServicio.listarAulas();
         model.addAttribute("aulas", aulas);
-
         Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", usuarioAutenticacionServicio.obtenerUsuarioActual(usuario));
+        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
         return "aulas/listar";
     }
 
     @GetMapping("/crear")
-    public String crearAulaForm(Model model) {
+    public String crearAulaForm(Model model, @AuthenticationPrincipal User usuario) {
         model.addAttribute("aula", new Aula());
+        model.addAttribute("currentUser", usuarioAutenticacionServicio.obtenerUsuarioActual(usuario));
+        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
+
         return "aulas/crear";
     }
 
@@ -94,10 +101,21 @@ public class AulaController {
 
     @GetMapping("/aula/{id_aula}")
     public String verAula(@PathVariable("id_aula") Long id_aula, Model model, @AuthenticationPrincipal User usuario) {
+
         Aula aula = aulaServicio.encontrarAula(id_aula);
-        model.addAttribute("aula", aula);
+        if (aula == null) {
+            return "redirect:/"; // Redirige a una página de error si el aula no existe
+        }
+
 
         Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
+
+        boolean tieneAcceso = aula.getUsuarios().contains(currentUser) || aula.getAdministradores().contains(currentUser);
+
+        if (!tieneAcceso) {
+            return "redirect:/"; // Redirige a una página de acceso denegado
+        }
+        model.addAttribute("aula", aula);
         model.addAttribute("currentUser", currentUser);
 
         return "aulas/visualizacion";

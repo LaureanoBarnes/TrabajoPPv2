@@ -13,9 +13,9 @@
 <footer th:fragment="piepagina">
     <p th:text="#{pagina.pie-de-pagina}">Creado por Laureano Barnes, Federico Drab, Francisco Barnes</a> </p>
     <form method="POST" th:action="@{logout}">
-        <b>User: </b> <span sec:authentication="name">Usuario que ingreso</span>
+<!--        <b>User: </b> <span sec:authentication="name">Usuario que ingreso</span>-->
         <br> <b>Roles: </b> <span sec:authentication="principal.authorities">Rol</span> -
-    <a href="/ingreso?logout" onclick="this.parentNode.submit();">Desconectarse</a>
+<!--    <a href="/ingreso?logout" onclick="this.parentNode.submit();">Desconectarse</a>-->
     </form>
 </footer>
 </body>

@@ -15,6 +15,8 @@ import java.util.Locale;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
+
     @Bean
     public LocaleResolver localeResolver(){
         SessionLocaleResolver slr = new SessionLocaleResolver();
@@ -37,6 +39,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("/upload/**")
                 .addResourceLocations("file:upload/");
+
+        // Manejador para recursos estáticos (CSS, JS, imágenes, etc.)
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
+
 
     }
 

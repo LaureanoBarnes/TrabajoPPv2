@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Listar Aulas</title>
+    <link href="/Estilos/stylePrincipal.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <button>
+    <div>
+        <!-- Cambié el botón por un enlace -->
+        <a href="/" title="home">
+            <img src="https://www.svgrepo.com/show/404089/school.svg" class ="home-img">
+        </a>
+    </div>
+    </button>
+    <div class="dropdown">
+        <span th:text="${nombreCompleto}"></span>
+        <button>
+            <img src="https://www.svgrepo.com/show/512697/profile-1341.svg" class="profile-img">
+        </button>
+
+        <div class="dropdown-content">
+            <a sec:href="@{/perfil}">Perfil</a>
+            <a href="/logout" onclick="this.parentNode.submit();">desconectarse</a>
+        </div>
+    </div>
+</header>
+<aside>
+    <h2>Aulas disponibles</h2>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/crear}"><button type="button">Crear Aula</button></a>
+    <div th:if="${aulas.size() == 0}">
+        <p>No hay aulas disponibles.</p>
+    </div>
+    <div th:if="${aulas.size() > 0}">
+        <ul>
+            <li th:each="aula : ${aulas}">
+                <span th:text="${aula.nombreAula}">Nombre del Aula</span> -
+                <span th:text="${aula.cursoAula}">Curso del Aula</span>
+                <!-- Opción de entrar -->
+                <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
+                   th:href="@{/aula/{id_aula}(id_aula=${aula.id_aula})}">- Entrar</a>
+                <div style="display: inline;">
+                    <!-- Controlar la visibilidad del icono de engranaje y el menú desplegable -->
+                    <div th:if="${#lists.contains(aula.administradores, currentUser)}"
+                         class="dropdown">
+                        <img src="https://i.postimg.cc/dt165Ybp/gear-svgrepo-com-1.png" alt="Configurar" width="15" height="15">
+                        <div class="dropdown-content">
+                            <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
+                               sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/editar/{id_aula}(id_aula=${aula.id_aula})}">Editar</a>
+                            <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
+                               sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/eliminar/{id}(id=${aula.id_aula})}">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</aside>
+<!--<h1>Lista de Aulas</h1>-->
+<!--<table>-->
+<!--    <tbody>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<footer th:replace="~{plantilla/plantilla :: piepagina}"></footer>-->
+<div class="info">
+    <a>
+        <h1>Información de la ultima actualización: </h1>
+        <h2>
+            Se ha agregado nuevas interfaces, iconos y modificado permisos especiales como:
+            <br>
+            * Accesos denegados a usuarios que no estan dentro de una aula
+            <br>
+            * Permisos de subir archivos
+            <br>
+            * Ahora solamente el admin correspondiente puede editar el aula creado
+
+
+        </h2>
+    </a>
+
+
+
+</div>
+</body>
+</html>

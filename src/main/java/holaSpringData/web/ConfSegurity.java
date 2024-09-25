@@ -24,8 +24,8 @@ public class ConfSegurity {
                 .csrf(csrf-> csrf.disable())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/cambiar/**", "/borrar/**", "/api/**", "/crear" ).hasRole("ADMIN")
-                                .requestMatchers("/anexar", "/salvar").permitAll()
+                                .requestMatchers("/registro/**", "/borrar/**", "/api/**", "/crear" ).hasRole("ADMIN")
+                                .requestMatchers("/anexar", "/salvar", "/Estilos/**", "/home/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->

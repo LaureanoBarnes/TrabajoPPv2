@@ -52,7 +52,7 @@ public class UserController {
         model.addAttribute("individuo", new Individuo());
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("roles", List.of("ROLE_ADMIN", "ROLE_USER"));
-        return "cambiar";
+        return "registro";
 
     }
 
@@ -62,7 +62,7 @@ public class UserController {
                          @RequestParam("rol") String rolNombre
                          ) {
         if (errorIndividuo.hasErrors() || errorUsuario.hasErrors()) {
-            return "cambiar";
+            return "registro";
         }
 
         Rol rol = rolServicio.localizarRol(rolNombre);

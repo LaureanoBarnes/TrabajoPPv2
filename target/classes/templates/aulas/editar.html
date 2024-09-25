@@ -13,7 +13,8 @@
 <ul>
     <li th:each="admin : ${aula.administradores}">
         <span th:text="${admin.nombre} + ' ' + ${admin.apellido}"></span>
-        <form th:action="@{/aula/{id_aula}/eliminarAdministrador(id_aula=${aula.id_aula})}" method="post" style="display:inline;">
+        <form th:action="@{/aula/{id_aula}/eliminarAdministrador(id_aula=${aula.id_aula})}" method="post"
+              style="display:inline;">
             <input type="hidden" name="id_individuo" th:value="${admin.id_individuo}">
             <button type="submit">Eliminar</button>
         </form>
@@ -29,7 +30,8 @@
 <ul>
     <li th:each="user : ${aula.usuarios}">
         <span th:text="${user.nombre} + ' ' + ${user.apellido}"></span>
-        <form th:action="@{/aula/{id_aula}/eliminarUsuario(id_aula=${aula.id_aula})}" method="post" style="display:inline;">
+        <form th:action="@{/aula/{id_aula}/eliminarUsuario(id_aula=${aula.id_aula})}" method="post"
+              style="display:inline;">
             <input type="hidden" name="id_individuo" th:value="${user.id_individuo}">
             <button type="submit">Eliminar</button>
         </form>

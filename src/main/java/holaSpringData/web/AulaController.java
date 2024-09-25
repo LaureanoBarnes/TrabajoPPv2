@@ -35,7 +35,7 @@ public class AulaController {
         Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
         model.addAttribute("currentUser", usuarioAutenticacionServicio.obtenerUsuarioActual(usuario));
         model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
-        return "aulas/listar";
+        return "aulas/home";
     }
 
     @GetMapping("/crear")

@@ -32,7 +32,6 @@
 <p>Curso: <span th:text="${aula.cursoAula}"></span></p>
 
 
-
 <h2>Administradores</h2>
 <ul>
     <li th:each="admin : ${aula.administradores}">
@@ -61,24 +60,26 @@
     <p>Ya eres miembro de esta aula.</p>
 </div>
 <div sec:authorize="hasRole('ROLE_ADMIN')">
-<h2>Subir archivo PDF</h2>
-<form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept=".pdf" required>
-    <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
-    <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
-    <button type="submit">Subir PDF</button>
-</form>
-<div th:if="${mensaje != null}" th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">
-    <p th:text="${mensaje}"></p>
-</div></div>
+    <h2>Subir archivo PDF</h2>
+    <form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf" required>
+        <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
+        <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
+        <button type="submit">Subir PDF</button>
+    </form>
+    <div th:if="${mensaje != null}"
+         th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">
+        <p th:text="${mensaje}"></p>
+    </div>
+</div>
 
 <script>
     // Espera 3 segundos y luego oculta el mensaje
-    setTimeout(function() {
+    setTimeout(function () {
         var mensajeDiv = document.getElementById("mensaje");
         if (mensajeDiv) {
             mensajeDiv.style.opacity = '0';
-            setTimeout(function() {
+            setTimeout(function () {
                 mensajeDiv.style.display = 'none';
             }, 500); // Tiempo adicional para que la transición se complete
         }

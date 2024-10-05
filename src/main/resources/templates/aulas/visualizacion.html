@@ -73,6 +73,35 @@
     </div>
 </div>
 
+
+
+<h2>Archivos Subidos</h2>
+<ul>
+    <li th:if="${archivos.size() == 0}">
+        <p>No hay archivos subidos en esta aula.</p>
+    </li>
+    <li th:each="archivo : ${archivos}">
+        <a target="_blank" th:href="@{${archivo.nombre}}" th:text="${archivo.nombre}">Descargar</a>
+        <form  th:action="@{/archivo/eliminar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este archivo?');">
+            <button type="submit">Eliminar</button>
+        </form>
+
+        <!-- Botón para editar -->
+        <button type="button" th:onclick="'mostrarFormularioEditar(' + ${archivo.id} + ');'">Editar</button>
+
+
+        <!-- Formulario de edición que se oculta inicialmente -->
+        <form th:attr="id='form-editar-' + ${archivo.id}" th:action="@{/archivo/editar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}" method="post" enctype="multipart/form-data" style="display:none;">
+            <label for="file-[[${archivo.id}]]">Seleccionar archivo PDF:</label>
+            <input type="file" id="file-[[${archivo.id}]]" name="file" accept=".pdf" required />
+
+            <button type="submit">Actualizar</button>
+        </form>
+    </li>
+</ul>
+
+
+
 <script>
     // Espera 3 segundos y luego oculta el mensaje
     setTimeout(function () {
@@ -84,8 +113,31 @@
             }, 500); // Tiempo adicional para que la transición se complete
         }
     }, 3000); // 3 segundos
-</script>
 
+    function mostrarFormularioEditar(archivoId) {
+        console.log("ID del archivo recibido: ", archivoId); // Verifica el ID recibido
+
+        var form = document.getElementById("form-editar-" + archivoId);
+        console.log("Buscando el formulario con ID: form-editar-" + archivoId); // Verifica la búsqueda
+
+        if (form) {  // Verifica si el formulario existe
+            console.log("Formulario encontrado: ", form); // Imprime el formulario encontrado
+
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block"; // Mostrar el formulario
+                console.log("Formulario mostrado");
+            } else {
+                form.style.display = "none"; // Ocultar el formulario
+                console.log("Formulario ocultado");
+            }
+        } else {
+            console.error("No se encontró el formulario con ID: form-editar-" + archivoId);
+        }
+    }
+
+
+</script>
 <a href="/" th:href="@{/}">Volver a la lista de aulas</a>
+
 </body>
 </html>

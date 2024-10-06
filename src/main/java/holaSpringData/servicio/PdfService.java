@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface PdfService {
 
-    Archivos save(Archivos archivos, MultipartFile file) throws IOException;
+    Archivos save(Archivos archivos, MultipartFile file, Long idAula) throws IOException;
 
-    List<Archivos> getArchivos();
+    List<Archivos> getArchivos(Long idAula);
 
     Archivos get(Long id);
 
-    Archivos update(Long id, Archivos archivos, MultipartFile file) throws IOException;
+    Archivos update(Long id, Archivos archivos, MultipartFile file, Long idAula) throws IOException;
 
     void delete(Long id) throws IOException;
 }

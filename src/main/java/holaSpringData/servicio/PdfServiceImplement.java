@@ -21,19 +21,22 @@ public class PdfServiceImplement implements PdfService {
     String url = "http://localhost:8080/upload/";
 
     @Override
-    public Archivos save(Archivos archivos, MultipartFile file) throws IOException {
-        String nombre = uploadService.saveUpload(file);
-        archivos.setNombre(nombre);
+    public Archivos save(Archivos archivos, MultipartFile file, Long idAula) throws IOException {
+        String filePath = uploadService.saveUpload(file, idAula);
+        archivos.setNombre(filePath);
         return archivodao.save(archivos);
     }
 
     @Override
-    public List<Archivos> getArchivos() {
-        List <Archivos> archivos = archivodao.findAll();
-        archivos = archivos.stream().map(archivo -> {archivo.setNombre(url + archivo.getNombre());
-        return archivo;
-        }).collect(Collectors.toList());
-
+    public List<Archivos> getArchivos(Long idAula) {
+        List<Archivos> archivos = archivodao.findAll();
+        archivos = archivos.stream()
+                .filter(archivo -> archivo.getNombre().startsWith(idAula + "/"))
+                .map(archivo -> {
+                    archivo.setNombre(url + archivo.getNombre());
+                    return archivo;
+                })
+                .collect(Collectors.toList());
         return archivos;
     }
 
@@ -45,24 +48,21 @@ public class PdfServiceImplement implements PdfService {
     }
 
     @Override
-    public Archivos update(Long id, Archivos archivos, MultipartFile file) throws IOException {
+    public Archivos update(Long id, Archivos archivos, MultipartFile file, Long idAula) throws IOException {
         archivos.setId(id);
-        Archivos archivos1 = archivodao.findById(id).get();
-        String nombre = uploadService.saveUpload(file);
-        if (!archivos1.getNombre().equals(nombre)){
-            uploadService.deleteUpload(archivos1.getNombre());
+        Archivos oldArchivo = archivodao.findById(id).get();
+        String filePath = uploadService.saveUpload(file, idAula);
+        if (!oldArchivo.getNombre().equals(filePath)) {
+            uploadService.deleteUpload(oldArchivo.getNombre());
         }
-        archivos.setId(id);
-        archivos.setNombre(nombre);
+        archivos.setNombre(filePath);
         return archivodao.save(archivos);
     }
 
     @Override
     public void delete(Long id) throws IOException {
-
         Archivos archivos = archivodao.findById(id).get();
-        String nombre = archivos.getNombre();
-        uploadService.deleteUpload(nombre);
+        uploadService.deleteUpload(archivos.getNombre());
         archivodao.delete(archivos);
     }
 }

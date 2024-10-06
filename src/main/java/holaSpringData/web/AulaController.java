@@ -115,23 +115,31 @@ public class AulaController {
     }
 
     @GetMapping("/archivo/editar/{id}/{id_aula}")
-    public String editarArchivo(@PathVariable Long id, @PathVariable Long id_aula, Model model) {
+    public String editarArchivo(
+            @PathVariable Long id,
+            @PathVariable Long id_aula,
+            Model model) {
         Archivos archivo = pdfService.get(id);
         model.addAttribute("archivo", archivo);
-        model.addAttribute("id_aula", id_aula); // Pasar el ID del aula para redirigir después
-        return "redirect:/aula/" + id_aula; // Devuelve la vista "aula" donde se pueden mostrar los archivos y el formulario
+        model.addAttribute("id_aula", id_aula);
+        return "redirect:/aula/" + id_aula;
     }
 
 
     @PostMapping("/archivo/editar/{id}/{id_aula}")
-    public String actualizarArchivo(@PathVariable Long id, @PathVariable Long id_aula, @ModelAttribute Archivos archivo, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    public String actualizarArchivo(
+            @PathVariable Long id,
+            @PathVariable Long id_aula,
+            @ModelAttribute Archivos archivo,
+            @RequestParam("file") MultipartFile file,
+            RedirectAttributes redirectAttributes) {
         try {
-            pdfService.update(id, archivo, file);
+            pdfService.update(id, archivo, file, id_aula); // Incluye id_aula como cuarto parámetro
             redirectAttributes.addFlashAttribute("mensaje", "Archivo actualizado correctamente");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el archivo");
         }
-        return "redirect:/aula/" + id_aula; // Redirige a la página del aula
+        return "redirect:/aula/" + id_aula;
     }
 
 
@@ -146,7 +154,7 @@ public class AulaController {
         }
 
 
-        List<Archivos> archivos = pdfService.getArchivos();
+        List<Archivos> archivos = pdfService.getArchivos(id_aula);
         model.addAttribute("archivos", archivos);
 
 

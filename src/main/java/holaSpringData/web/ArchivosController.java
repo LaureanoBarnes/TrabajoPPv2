@@ -29,26 +29,23 @@ public class ArchivosController {
 
         try {
             Archivos archivo = new Archivos();
-            archivo.setCategoria(categoria);  // El nombre del aula se asigna como la categoría
-            pdfService.save(archivo, file);
+            archivo.setCategoria(categoria);
+            pdfService.save(archivo, file, aulaId);
 
-            // Añadir mensaje de éxito
             redirectAttributes.addFlashAttribute("mensaje", "Archivo subido correctamente.");
             redirectAttributes.addFlashAttribute("tipoMensaje", "exito");
 
         } catch (IOException e) {
-            // Añadir mensaje de error
             redirectAttributes.addFlashAttribute("mensaje", "No se pudo subir el archivo: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
 
-        // Redireccionar al aula correspondiente
         return new RedirectView("/aula/" + aulaId);
     }
 
-    @GetMapping("/archivo")
-    public ResponseEntity<List<Archivos>> getArchivos(){
-        return new ResponseEntity<>(pdfService.getArchivos(), HttpStatus.OK);
+    @GetMapping("/archivo/{aulaId}")
+    public ResponseEntity<List<Archivos>> getArchivos(@PathVariable Long aulaId){
+        return new ResponseEntity<>(pdfService.getArchivos(aulaId), HttpStatus.OK);
     }
 
     @GetMapping("/archivo/{id}")
@@ -57,9 +54,12 @@ public class ArchivosController {
     }
 
     @PutMapping("/archivo/{id}")
-    public ResponseEntity<Archivos> updateArchivo(@PathVariable Long id, @RequestPart Archivos archivos
-    , @RequestPart MultipartFile file) throws IOException{
-        return new ResponseEntity<>(pdfService.update(id, archivos, file), HttpStatus.OK);
+    public ResponseEntity<Archivos> updateArchivo(
+            @PathVariable Long id,
+            @RequestParam Long aulaId, // Agrega `aulaId` como parámetro
+            @RequestPart Archivos archivos,
+            @RequestPart MultipartFile file) throws IOException {
+        return new ResponseEntity<>(pdfService.update(id, archivos, file, aulaId), HttpStatus.OK);
     }
 
     @DeleteMapping("/archivo/{id}")
@@ -67,5 +67,4 @@ public class ArchivosController {
         pdfService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

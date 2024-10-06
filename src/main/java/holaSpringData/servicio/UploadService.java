@@ -14,30 +14,35 @@ import java.util.Objects;
 
 @Service
 public class UploadService {
+
     private String sanitizeFileName(String fileName) {
         return fileName.replaceAll("[^a-zA-Z0-9.]", "_");
     }
 
-    private final String url = "upload/";
+    private final String BASE_URL = "upload/";
 
-    public String saveUpload(MultipartFile file) throws IOException {
-        if (!file.isEmpty()){
-            byte [] bytes = file.getBytes();
-            // Limpiar el nombre del archivo
+    public String saveUpload(MultipartFile file, Long idAula) throws IOException {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
             String originalFileName = Objects.requireNonNull(file.getOriginalFilename());
             String sanitizedFileName = sanitizeFileName(originalFileName);
-            // Codificar el nombre del archivo
             String encodedFileName = URLEncoder.encode(sanitizedFileName, StandardCharsets.UTF_8);
 
-            Path path = Paths.get(url + encodedFileName);
-            Files.write(path, bytes);
-            return encodedFileName;
+            // Crear directorio específico para el aula si no existe
+            Path aulaDir = Paths.get(BASE_URL + idAula);
+            if (!Files.exists(aulaDir)) {
+                Files.createDirectories(aulaDir);
+            }
+
+            Path filePath = aulaDir.resolve(encodedFileName);
+            Files.write(filePath, bytes);
+            return idAula + "/" + encodedFileName; // Devolver la ruta relativa
         }
         return null;
     }
 
-    public void deleteUpload(String nombre) throws IOException{
-        File file = new File(url + nombre);
+    public void deleteUpload(String filePath) throws IOException {
+        File file = new File(BASE_URL + filePath);
         file.delete();
     }
 }

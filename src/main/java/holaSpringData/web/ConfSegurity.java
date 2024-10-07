@@ -25,7 +25,7 @@ public class ConfSegurity {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/registro/**", "/borrar/**", "/api/**", "/crear" ).hasRole("ADMIN")
-                                .requestMatchers("/anexar", "/salvar", "/Estilos/**", "/home/**").permitAll()
+                                .requestMatchers("/anexar", "/salvar", "/Estilos/**", "/home/**","/subirmaterial/**","/api/**","/archivo/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->

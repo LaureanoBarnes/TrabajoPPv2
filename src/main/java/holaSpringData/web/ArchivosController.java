@@ -40,8 +40,10 @@ public class ArchivosController {
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
 
-        return new RedirectView("/aula/" + aulaId);
+        return new RedirectView("/aula/" + aulaId + "/subirmaterial");
     }
+
+
 
     @GetMapping("/archivo/{aulaId}")
     public ResponseEntity<List<Archivos>> getArchivos(@PathVariable Long aulaId){

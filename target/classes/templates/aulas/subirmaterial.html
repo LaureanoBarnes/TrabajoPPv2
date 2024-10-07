@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Nombre del Aula</title>
+    <link href="/Estilos/Stylesubirmaterial.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="icon-container">
+        <button class="icon-btn">
+            <a href="/" title="home">
+                <img src="https://www.svgrepo.com/show/404089/school.svg" class="home-img">
+            </a>
+        </button>
+    </div>
+    <div class="class-name">
+        <h1><span th:text="${aula.nombreAula}"></span></h1>
+    </div>
+    <div class="dropdown">
+        <span th:text="${nombreCompleto}">Username</span>
+        <button class="icon-btn">
+            <img src="https://www.svgrepo.com/show/512697/profile-1341.svg" class="profile-img">
+        </button>
+        <div class="dropdown-content">
+            <a sec:href="@{/perfil}">Perfil</a>
+            <a href="/logout" onclick="this.parentNode.submit();">Desconectarse</a>
+        </div>
+    </div>
+</header>
+
+<aside>
+    <ul>
+        <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}">Inicio</a></li>
+        <li><a href="/foro">Foro</a></li>
+        <li><a href="/materiales">Materiales</a></li>
+        <li><a href="/actividades">Actividades</a></li>
+        <li><a href="/participantes">Participantes</a></li>
+    </ul>
+</aside>
+
+<main>
+    <div class="upload-material">
+        <h1>Subir Material ⧁</h1>
+        <form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pdf" required>
+            <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
+            <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
+            <button type="submit">Subir PDF</button>
+        </form>
+        <div th:if="${mensaje != null}"
+             th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">
+            <p th:text="${mensaje}"></p>
+        </div>
+
+        <div class="uploaded-files">
+            <h2>Archivos cargados:</h2>
+            <ul>
+                <li th:if="${archivos.size() == 0}">
+                    <p>No hay archivos subidos en esta aula.</p>
+                </li>
+                <li th:each="archivo : ${archivos}">
+                    <div class="file-item">
+                        <a target="_blank" th:href="@{${archivo.nombre}}" th:text="${archivo.nombre}">Descargar</a>
+                        <div class="icon-container">
+                            <button class="gear-btn" onclick="toggleOptions('options-[[${archivo.id}]]')">
+                                <img src="https://i.postimg.cc/dt165Ybp/gear-svgrepo-com-1.png" class="gear-img"
+                                     alt="Opciones" width="15" height="15">
+                            </button>
+                        </div>
+                    </div>
+                    <div id="options-[[${archivo.id}]]" class="options" style="display:none;">
+                        <form th:action="@{/archivo/eliminar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}"
+                              method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este archivo?');">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                        <button type="button" th:onclick="'mostrarFormularioEditar(' + ${archivo.id} + ');'">Editar</button>
+                        <form th:attr="id='form-editar-' + ${archivo.id}"
+                              th:action="@{/archivo/editar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}"
+                              method="post" enctype="multipart/form-data" style="display:none;">
+                            <label for="file-[[${archivo.id}]]">Seleccionar archivo PDF:</label>
+                            <input type="file" id="file-[[${archivo.id}]]" name="file" accept=".pdf" required/>
+                            <button type="submit">Actualizar</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+    function toggleOptions(id) {
+        var options = document.getElementById(id);
+        if (options.style.display === "none" || options.style.display === "") {
+            options.style.display = "block";
+        } else {
+            options.style.display = "none";
+        }
+    }
+
+    // Espera 3 segundos y luego oculta el mensaje
+    setTimeout(function () {
+        var mensajeDiv = document.getElementById("mensaje");
+        if (mensajeDiv) {
+            mensajeDiv.style.opacity = '0';
+            setTimeout(function () {
+                mensajeDiv.style.display = 'none';
+            }, 500); // Tiempo adicional para que la transición se complete
+        }
+    }, 3000); // 3 segundos
+
+    function mostrarFormularioEditar(archivoId) {
+        var form = document.getElementById("form-editar-" + archivoId);
+        if (form) {
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block"; // Mostrar el formulario
+            } else {
+                form.style.display = "none"; // Ocultar el formulario
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

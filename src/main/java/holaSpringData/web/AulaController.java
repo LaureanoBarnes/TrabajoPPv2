@@ -111,7 +111,7 @@ public class AulaController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "No se pudo eliminar el archivo");
         }
-        return "redirect:/aula/" + id_aula;  // Redirige a la lista de archivos o la página que desees
+        return "redirect:/aula/" + id_aula + "/subirmaterial";  // Redirige a la lista de archivos o la página que desees
     }
 
     @GetMapping("/archivo/editar/{id}/{id_aula}")
@@ -122,7 +122,7 @@ public class AulaController {
         Archivos archivo = pdfService.get(id);
         model.addAttribute("archivo", archivo);
         model.addAttribute("id_aula", id_aula);
-        return "redirect:/aula/" + id_aula;
+        return "redirect:/aula/" + id_aula +"/subirmaterial";
     }
 
 
@@ -139,7 +139,7 @@ public class AulaController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el archivo");
         }
-        return "redirect:/aula/" + id_aula;
+        return "redirect:/aula/" + id_aula +"/subirmaterial";
     }
 
 
@@ -153,11 +153,6 @@ public class AulaController {
             return "redirect:/"; // Redirige a una página de error si el aula no existe
         }
 
-
-        List<Archivos> archivos = pdfService.getArchivos(id_aula);
-        model.addAttribute("archivos", archivos);
-
-
         Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
 
         boolean tieneAcceso = aula.getUsuarios().contains(currentUser) || aula.getAdministradores().contains(currentUser);
@@ -170,4 +165,23 @@ public class AulaController {
 
         return "aulas/visualizacion";
     }
+
+    @GetMapping("/aula/{id}/subirmaterial")
+    public String mostrarSubirMaterial(@PathVariable Long id, Model model, @AuthenticationPrincipal User usuario) {
+        model.addAttribute("currentUser", usuarioAutenticacionServicio.obtenerUsuarioActual(usuario));
+        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
+
+        Aula aula = aulaServicio.encontrarAula(id);
+        if (aula == null) {
+            return "redirect:/"; // Si no se encuentra, redirige a una página de error
+        }
+
+        model.addAttribute("aula", aula);
+        List<Archivos> archivos = pdfService.getArchivos(id);
+        model.addAttribute("archivos", archivos);  // Asegúrate de pasar 'archivos' aquí
+        model.addAttribute("id_aula", id); // Pasar también el 'id_aula' si es necesario
+
+        return "aulas/subirmaterial"; // Cargar la vista correcta
+    }
+
 }

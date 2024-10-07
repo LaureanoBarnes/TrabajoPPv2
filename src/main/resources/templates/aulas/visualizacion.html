@@ -24,30 +24,83 @@
 </style>
 <head>
 
-    <title>Ver Aula</title>
+    <title>Home Aula</title>
+    <link href="/Estilos/stylePrincipal.css" rel="stylesheet">
 </head>
 <body>
+<header>
+    <button>
+        <div>
+            <!-- Cambié el botón por un enlace -->
+            <a href="/" title="home">
+                <img src="https://www.svgrepo.com/show/404089/school.svg" class ="home-img">
+            </a>
+        </div>
+    </button>
+    <div class="dropdown">
+        <span th:text="${nombreCompleto}"></span>
+        <button>
+            <img src="https://www.svgrepo.com/show/512697/profile-1341.svg" class="profile-img">
+        </button>
 
-<h1>Aula: <span th:text="${aula.nombreAula}"></span></h1>
-<p>Curso: <span th:text="${aula.cursoAula}"></span></p>
+        <div class="dropdown-content">
+            <a sec:href="@{/perfil}">Perfil</a>
+            <a href="/logout" onclick="this.parentNode.submit();">desconectarse</a>
+        </div>
+    </div>
+</header>
+<aside>
+    </div>
+        <ul>
+            <li>
+                <a href="/" th:href="@{/}">Volver a la lista de aulas</a>
+            </li>
+            <li>
+                <a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}">subir material</a>
+            </li>
+        </ul>
+</aside>
+<div class="info">
+    <a>
+        <h1>Bienvenido al Aula de <span th:text="${aula.nombreAula}"></span></h1>
+        <h1>Curso:<span th:text="${aula.cursoAula}"></span> </h1>
+        <h2>
+            Se ha agregado nuevas interfaces, iconos y modificado permisos especiales como:
+            <br>
+            * Accesos denegados a usuarios que no estan dentro de una aula
+            <br>
+            * Permisos de subir archivos
+            <br>
+            * Ahora solamente el admin correspondiente puede editar el aula creado
 
 
-<h2>Administradores</h2>
-<ul>
-    <li th:each="admin : ${aula.administradores}">
-        <span th:text="${admin.nombre} + ' ' + ${admin.apellido} + ' (' + ${admin.correo} + ') - ' + ${admin.unUsuario.unRol.nombre}"></span>
-    </li>
-</ul>
+        </h2>
+    </a>
 
-<h2>Usuarios</h2>
-<ul>
-    <li th:if="${aula.usuarios.size() == 0}">
-        <p>No hay usuarios en esta aula.</p>
-    </li>
-    <li th:each="user : ${aula.usuarios}">
-        <span th:text="${user.nombre} + ' ' + ${user.apellido} + ' (' + ${user.correo} + ') - ' + ${user.unUsuario.unRol.nombre}"></span>
-    </li>
-</ul>
+
+
+</div>
+
+<!--<h1>Aula: <span th:text="${aula.nombreAula}"></span></h1>-->
+<!--<p>Curso: <span th:text="${aula.cursoAula}"></span></p>-->
+
+
+<!--<h2>Administradores</h2>-->
+<!--<ul>-->
+<!--    <li th:each="admin : ${aula.administradores}">-->
+<!--        <span th:text="${admin.nombre} + ' ' + ${admin.apellido} + ' (' + ${admin.correo} + ') - ' + ${admin.unUsuario.unRol.nombre}"></span>-->
+<!--    </li>-->
+<!--</ul>-->
+
+<!--<h2>Usuarios</h2>-->
+<!--<ul>-->
+<!--    <li th:if="${aula.usuarios.size() == 0}">-->
+<!--        <p>No hay usuarios en esta aula.</p>-->
+<!--    </li>-->
+<!--    <li th:each="user : ${aula.usuarios}">-->
+<!--        <span th:text="${user.nombre} + ' ' + ${user.apellido} + ' (' + ${user.correo} + ') - ' + ${user.unUsuario.unRol.nombre}"></span>-->
+<!--    </li>-->
+<!--</ul>-->
 
 <!--<div th:if="${not #lists.contains(aula.usuarios, currentUser)}">-->
 <!--    <form th:action="@{/aula/{id_aula}/agregarUsuario(id_aula=${aula.id_aula})}" method="post" style="display:inline;">-->
@@ -56,88 +109,27 @@
 <!--    </form>-->
 <!--</div>-->
 
-<div th:if="${#lists.contains(aula.usuarios, currentUser)}">
-    <p>Ya eres miembro de esta aula.</p>
-</div>
-<div sec:authorize="hasRole('ROLE_ADMIN')">
-    <h2>Subir archivo PDF</h2>
-    <form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf" required>
-        <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
-        <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
-        <button type="submit">Subir PDF</button>
-    </form>
-    <div th:if="${mensaje != null}"
-         th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">
-        <p th:text="${mensaje}"></p>
-    </div>
-</div>
+<!--<div th:if="${#lists.contains(aula.usuarios, currentUser)}">-->
+<!--    <p>Ya eres miembro de esta aula.</p>-->
+<!--</div>-->
+<!--<div sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--    <h2>Subir archivo PDF</h2>-->
+<!--    <form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">-->
+<!--        <input type="file" name="file" accept=".pdf" required>-->
+<!--        <input type="hidden" name="categoria" th:value="${aula.nombreAula}">-->
+<!--        <input type="hidden" name="aulaId" th:value="${aula.id_aula}">-->
+<!--        <button type="submit">Subir PDF</button>-->
+<!--    </form>-->
+<!--    <div th:if="${mensaje != null}"-->
+<!--         th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">-->
+<!--        <p th:text="${mensaje}"></p>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 
-<h2>Archivos Subidos</h2>
-<ul>
-    <li th:if="${archivos.size() == 0}">
-        <p>No hay archivos subidos en esta aula.</p>
-    </li>
-    <li th:each="archivo : ${archivos}">
-        <a target="_blank" th:href="@{${archivo.nombre}}" th:text="${archivo.nombre}">Descargar</a>
-        <form  th:action="@{/archivo/eliminar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este archivo?');">
-            <button type="submit">Eliminar</button>
-        </form>
 
-        <!-- Botón para editar -->
-        <button type="button" th:onclick="'mostrarFormularioEditar(' + ${archivo.id} + ');'">Editar</button>
-
-
-        <!-- Formulario de edición que se oculta inicialmente -->
-        <form th:attr="id='form-editar-' + ${archivo.id}" th:action="@{/archivo/editar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}" method="post" enctype="multipart/form-data" style="display:none;">
-            <label for="file-[[${archivo.id}]]">Seleccionar archivo PDF:</label>
-            <input type="file" id="file-[[${archivo.id}]]" name="file" accept=".pdf" required />
-
-            <button type="submit">Actualizar</button>
-        </form>
-    </li>
-</ul>
-
-
-
-<script>
-    // Espera 3 segundos y luego oculta el mensaje
-    setTimeout(function () {
-        var mensajeDiv = document.getElementById("mensaje");
-        if (mensajeDiv) {
-            mensajeDiv.style.opacity = '0';
-            setTimeout(function () {
-                mensajeDiv.style.display = 'none';
-            }, 500); // Tiempo adicional para que la transición se complete
-        }
-    }, 3000); // 3 segundos
-
-    function mostrarFormularioEditar(archivoId) {
-        console.log("ID del archivo recibido: ", archivoId); // Verifica el ID recibido
-
-        var form = document.getElementById("form-editar-" + archivoId);
-        console.log("Buscando el formulario con ID: form-editar-" + archivoId); // Verifica la búsqueda
-
-        if (form) {  // Verifica si el formulario existe
-            console.log("Formulario encontrado: ", form); // Imprime el formulario encontrado
-
-            if (form.style.display === "none" || form.style.display === "") {
-                form.style.display = "block"; // Mostrar el formulario
-                console.log("Formulario mostrado");
-            } else {
-                form.style.display = "none"; // Ocultar el formulario
-                console.log("Formulario ocultado");
-            }
-        } else {
-            console.error("No se encontró el formulario con ID: form-editar-" + archivoId);
-        }
-    }
-
-
-</script>
-<a href="/" th:href="@{/}">Volver a la lista de aulas</a>
 
 </body>
+</header>
 </html>

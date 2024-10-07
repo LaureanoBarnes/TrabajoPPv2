@@ -1,0 +1,197 @@
+:root {
+    --foreground: #ffeb3b;
+    --background-dark: rgba(0, 0, 0, 0.7);
+    --primary-font: 'Passion One', cursive;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-image: url('https://www.getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--foreground);
+}
+
+header {
+    background-color: var(--background-dark);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--foreground);
+    position: relative;
+}
+
+.class-name h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--primary-font);
+    font-size: 36px;
+    margin: 0;
+}
+
+/* Asegura que el ícono de "Home" esté alineado a la izquierda */
+.icon-container {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.icon-btn {
+    background-color: var(--foreground); /* Fondo amarillo */
+    border: none;
+    width: 50px;
+    height: 50px;  /* Tamaño cuadrado */
+    padding: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-img, .profile-img {
+    width: 35px;
+    height: 35px;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--background-dark);
+    border-radius: 5px;
+    right: 0;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: var(--foreground);
+    padding: 10px 20px;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+aside {
+    background-color: var(--background-dark);
+    color: var(--foreground);
+    padding: 20px;
+    width: 200px;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+}
+
+aside ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+aside ul li {
+    margin-bottom: 10px;
+}
+
+aside ul li a {
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+aside ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.upload-material {
+    background-color: var(--background-dark);
+    color: var(--foreground);
+    text-align: center;
+    padding: 50px;
+    border-radius: 10px;
+    margin-top: 100px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.upload-material h1 {
+    font-family: var(--primary-font);
+    font-size: 36px;
+}
+
+.uploaded-files {
+    margin-top: 30px;
+}
+
+.uploaded-files h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+}
+
+.uploaded-files ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.uploaded-files li {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+.uploaded-files a {
+    color: #ffeb3b; /* Amarillo */
+    text-decoration: none;
+}
+
+.uploaded-files a:visited,
+.uploaded-files a:hover,
+.uploaded-files a:active {
+    color: #ffeb3b; /* Amarillo para todos los estados */
+    text-decoration: underline; /* Opcional: subrayado al pasar el mouse */
+}
+button{
+    color: #ffeb3b;
+    text-decoration: #ffeb3b;
+}
+
+header, aside, table {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: var(--radius);
+    color: #ffeb3b;
+}
+header {
+    padding: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

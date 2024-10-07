@@ -16,12 +16,10 @@ body {
 }
 
 header {
-    background-color: var(--background-dark);
     padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--foreground);
     position: relative;
 }
 
@@ -91,8 +89,6 @@ button {
 }
 
 aside {
-    background-color: var(--background-dark);
-    color: var(--foreground);
     padding: 20px;
     width: 200px;
     position: fixed;
@@ -103,6 +99,7 @@ aside {
     flex-direction: column;
     gap: 20px;
     justify-content: center;
+    transition: top 0.3s ease; /* Suaviza la transición de top */
 }
 
 aside ul {
@@ -134,9 +131,9 @@ main {
     background-color: var(--background-dark);
     color: var(--foreground);
     text-align: center;
-    padding: 50px;
+    padding: 80px;
     border-radius: 10px;
-    margin-top: 100px;
+    margin-top: 0px;
     width: 80%;
     margin-left: auto;
     margin-right: auto;
@@ -194,4 +191,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.class-name, .dropdown {
+    display: flex;
+    align-items: center;
+}
+
+.class-name h1 {
+    margin: 0;
+    font-size: 1.5em; /* Ajusta el tamaño según prefieras */
+    color: #ffeb3b;
 }

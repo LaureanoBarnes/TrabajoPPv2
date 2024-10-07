@@ -45,22 +45,23 @@ header, aside, table {
 }
 header {
     padding: 10px;
-    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 aside {
     padding: 20px;
-    width: 250px;
-    position: absolute;
-    top: 88px;
-    left: 0px;
-    bottom: 10px;
-    overflow-y: auto;
+    width: 200px;
+    position: fixed;
+    top: 98px;
+    left: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    gap: 20px;
+    justify-content: center;
+    transition: top 0.3s ease; /* Suaviza la transición de top */
 }
 table {
     width: 100%;

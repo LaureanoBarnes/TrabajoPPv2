@@ -18,7 +18,7 @@ public class PdfServiceImplement implements PdfService {
     @Autowired
     private UploadService uploadService;
 
-    String url = "http://localhost:8080/upload/";
+    String url = "/upload/";
 
     @Override
     public Archivos save(Archivos archivos, MultipartFile file, Long idAula) throws IOException {

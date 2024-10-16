@@ -1,87 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Listar Aulas</title>
-    <link href="/Estilos/stylePrincipal.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Virtual - Listado de Aulas</title>
+    <link rel="stylesheet" href="/Estilos/stylePrincipal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<header>
-    <button>
-    <div>
-        <!-- Cambié el botón por un enlace -->
-        <a href="/" title="home">
-            <img src="https://www.svgrepo.com/show/404089/school.svg" class ="home-img">
+<div class="container">
+    <header class="top-header">
+        <a href="/" class="logo">
+            <img src="https://www.svgrepo.com/show/404089/school.svg" alt="School" class="school-icon">
+            <h1>Aula Virtual</h1>
         </a>
-    </div>
-    </button>
-    <div class="dropdown">
-        <span th:text="${nombreCompleto}"></span>
-        <button>
-            <img src="https://www.svgrepo.com/show/512697/profile-1341.svg" class="profile-img">
-        </button>
-
-        <div class="dropdown-content">
-            <a sec:href="@{/perfil}">Perfil</a>
-            <a href="/logout" onclick="this.parentNode.submit();">desconectarse</a>
+        <div class="user-controls">
+            <span th:text="${nombreCompleto}" class="user-name"></span>
+            <div class="dropdown profile-dropdown">
+                <button class="icon-button profile-button">
+                    <i data-lucide="user" id="profile-icon"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a sec:href="@{/perfil}">Perfil</a>
+                    <a href="/logout" onclick="this.parentNode.submit();">Desconectarse</a>
+                </div>
+            </div>
+            <button id="darkModeToggle" class="icon-button">
+                <i data-lucide="moon"></i>
+            </button>
+            <button id="menuToggle" class="icon-button menu-toggle">
+                <i data-lucide="menu"></i>
+            </button>
         </div>
-    </div>
-</header>
-<aside>
-    <h2>Aulas disponibles</h2>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/crear}"><button type="button">Crear Aula</button></a>
-    <div th:if="${aulas.size() == 0}">
-        <p>No hay aulas disponibles.</p>
-    </div>
-    <div th:if="${aulas.size() > 0}">
-        <ul>
-            <li th:each="aula : ${aulas}">
-                <span th:text="${aula.nombreAula}">Nombre del Aula</span> -
-                <span th:text="${aula.cursoAula}">Curso del Aula</span>
-                <!-- Opción de entrar -->
-                <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
-                   th:href="@{/aula/{id_aula}(id_aula=${aula.id_aula})}">- Entrar</a>
-                <div style="display: inline;">
-                    <!-- Controlar la visibilidad del icono de engranaje y el menú desplegable -->
-                    <div th:if="${#lists.contains(aula.administradores, currentUser)}"
-                         class="dropdown">
-                        <img src="https://i.postimg.cc/dt165Ybp/gear-svgrepo-com-1.png" alt="Configurar" width="15" height="15">
-                        <div class="dropdown-content">
-                            <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
-                               sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/editar/{id_aula}(id_aula=${aula.id_aula})}">Editar</a>
-                            <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
-                               sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/eliminar/{id}(id=${aula.id_aula})}">Eliminar</a>
+    </header>
+
+    <div class="main-content">
+        <aside id="leftAside" class="left-aside">
+            <div class="aside-header">
+                <h2>Aulas disponibles</h2>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/crear}" class="icon-button">
+                    <i data-lucide="plus"></i>
+                </a>
+            </div>
+            <div th:if="${aulas.size() == 0}">
+                <p>No hay aulas disponibles.</p>
+            </div>
+            <ul id="classroomList" class="classroom-list" th:if="${aulas.size() > 0}">
+                <li th:each="aula : ${aulas}" class="classroom-item">
+                    <span th:text="${aula.nombreAula + ' - ' + aula.cursoAula}">Nombre del Aula - Curso</span>
+                    <div class="classroom-actions">
+                        <!-- Botón de ingreso reducido -->
+                        <a th:if="${#lists.contains(aula.usuarios, currentUser) or #lists.contains(aula.administradores, currentUser)}"
+                           th:href="@{/aula/{id_aula}(id_aula=${aula.id_aula})}" class="icon-button small-button">
+                            <i data-lucide="log-in"></i> Ingresar
+                        </a>
+                        <!-- Botón de registro reducido -->
+                        <a th:if="${!esAdmin && !#lists.contains(aula.usuarios, currentUser) && !#lists.contains(aula.administradores, currentUser)}"
+                           th:href="@{/aula/{id_aula}/registrarse(id_aula=${aula.id_aula})}"
+                           class="icon-button small-button">
+                            <i data-lucide="user-plus"></i> Registrarse
+                        </a>
+
+                        <!-- Opciones de configuración solo para administradores -->
+                        <div th:if="${#lists.contains(aula.administradores, currentUser)}" class="dropdown">
+                            <button class="icon-button settings-btn">
+                                <i data-lucide="settings"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                                   th:href="@{/editar/{id_aula}(id_aula=${aula.id_aula})}">Editar</a>
+                                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                                   th:href="@{/eliminar/{id}(id=${aula.id_aula})}">Eliminar</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main>
+            <div class="card system-info">
+                <h2>Información de la última actualización</h2>
+                <ul>
+                    <li class="news-item"><p>Se ha agregado nuevas interfaces, iconos y modificado permisos especiales
+                        como:</p></li>
+                    <li class="news-item"><p>Accesos denegados a usuarios que no están dentro de un aula</p></li>
+                    <li class="news-item"><p>Permisos de subir archivos</p></li>
+                    <li class="news-item"><p>Ahora solamente el admin correspondiente puede editar el aula creada</p></li>
+                </ul>
+            </div>
+        </main>
     </div>
-</aside>
-<!--<h1>Lista de Aulas</h1>-->
-<!--<table>-->
-<!--    <tbody>-->
-<!--    </tbody>-->
-<!--</table>-->
-<!--<footer th:replace="~{plantilla/plantilla :: piepagina}"></footer>-->
-<div class="info">
-    <a>
-        <h1>Información de la ultima actualización: </h1>
-        <h2>
-            Se ha agregado nuevas interfaces, iconos y modificado permisos especiales como:
-            <br>
-            * Accesos denegados a usuarios que no estan dentro de una aula
-            <br>
-            * Permisos de subir archivos
-            <br>
-            * Ahora solamente el admin correspondiente puede editar el aula creado
-
-
-        </h2>
-    </a>
-
-
-
 </div>
+
+<script src="/Estilos/javascript/scriptHome.js"></script>
 </body>
 </html>

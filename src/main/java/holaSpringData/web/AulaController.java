@@ -6,6 +6,7 @@ import holaSpringData.clases.Individuo;
 import holaSpringData.dao.ArchivoDao;
 import holaSpringData.servicio.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -37,12 +38,34 @@ public class AulaController {
     public String listarAulas(Model model, @AuthenticationPrincipal User usuario) {
         var aulas = aulaServicio.listarAulas();
         model.addAttribute("aulas", aulas);
+
         Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
-        model.addAttribute("currentUser", usuarioAutenticacionServicio.obtenerUsuarioActual(usuario));
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
+
+        // Verifica si el usuario tiene el rol de administrador
+        boolean esAdmin = usuario.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("esAdmin", esAdmin);
+
         return "aulas/home";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/aula/{id_aula}/registrarse")
+    public String registrarEnAula(@PathVariable("id_aula") Long id_aula, @AuthenticationPrincipal User usuario) {
+        Aula aula = aulaServicio.encontrarAula(id_aula);
+        Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
+
+        // Verifica que el usuario no sea un administrador ni esté en la lista de usuarios
+        if (!aula.getAdministradores().contains(currentUser) && !aula.getUsuarios().contains(currentUser)) {
+            aulaServicio.agregarUsuario(id_aula, currentUser.getId_individuo());
+        }
+
+        return "redirect:/aula/" + id_aula;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/crear")
     public String crearAulaForm(Model model, @AuthenticationPrincipal User usuario) {
         model.addAttribute("aula", new Aula());
@@ -52,6 +75,7 @@ public class AulaController {
         return "aulas/crear";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/guardar")
     public String guardarAula(@ModelAttribute Aula aula, @AuthenticationPrincipal User usuario) {
         Individuo creador = individuoServicio.findByNomusuario(usuario.getUsername());
@@ -63,6 +87,7 @@ public class AulaController {
         return "redirect:/";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id_aula}")
     public String editarAula(@PathVariable("id_aula") Long id_aula, Model model) {
         Aula aula = aulaServicio.encontrarAula(id_aula);
@@ -70,6 +95,7 @@ public class AulaController {
         return "aulas/crear";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/eliminar/{id}")
     public String eliminarAula(@PathVariable("id") Long id) {
         Aula aula = aulaServicio.encontrarAula(id);
@@ -103,6 +129,7 @@ public class AulaController {
         return "redirect:/aulas/editar/" + id_aula;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/archivo/eliminar/{id}/{id_aula}")
     public String eliminarArchivo(@PathVariable Long id, @PathVariable Long id_aula, RedirectAttributes redirectAttributes) {
         try {
@@ -114,6 +141,7 @@ public class AulaController {
         return "redirect:/aula/" + id_aula + "/subirmaterial";  // Redirige a la lista de archivos o la página que desees
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/archivo/editar/{id}/{id_aula}")
     public String editarArchivo(
             @PathVariable Long id,
@@ -125,7 +153,7 @@ public class AulaController {
         return "redirect:/aula/" + id_aula +"/subirmaterial";
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/archivo/editar/{id}/{id_aula}")
     public String actualizarArchivo(
             @PathVariable Long id,
@@ -147,23 +175,40 @@ public class AulaController {
 
     @GetMapping("/aula/{id_aula}")
     public String verAula(@PathVariable("id_aula") Long id_aula, Model model, @AuthenticationPrincipal User usuario) {
-
         Aula aula = aulaServicio.encontrarAula(id_aula);
         if (aula == null) {
-            return "redirect:/"; // Redirige a una página de error si el aula no existe
+            return "redirect:/"; // Redirige si el aula no existe
         }
 
         Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
+        boolean esAdmin = aula.getAdministradores().contains(currentUser);
+        boolean esUsuario = aula.getUsuarios().contains(currentUser);
 
-        boolean tieneAcceso = aula.getUsuarios().contains(currentUser) || aula.getAdministradores().contains(currentUser);
-
-        if (!tieneAcceso) {
-            return "redirect:/"; // Redirige a una página de acceso denegado
+        if (!esAdmin && !esUsuario) {
+            return "redirect:/aula/" + id_aula + "/registrarse";
         }
+
         model.addAttribute("aula", aula);
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
 
         return "aulas/visualizacion";
+    }
+    @GetMapping("/aula/{id}/foro")
+    public String verForo(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User usuario) {
+        Aula aula = aulaServicio.encontrarAula(id);
+        if (aula == null) {
+            return "redirect:/"; // Redirige si el aula no existe
+        }
+
+        Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
+        model.addAttribute("aula", aula);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
+
+        // Añade cualquier lógica específica para cargar el foro de esta aula
+
+        return "aulas/foro"; // Asegúrate de tener la vista "foro.html"
     }
 
     @GetMapping("/aula/{id}/subirmaterial")
@@ -183,5 +228,25 @@ public class AulaController {
 
         return "aulas/subirmaterial"; // Cargar la vista correcta
     }
+
+    @GetMapping("/aula/{id}/participantes")
+    public String mostrarParticipantes(@PathVariable Long id, Model model, @AuthenticationPrincipal User usuario) {
+        model.addAttribute("currentUser", usuarioAutenticacionServicio.obtenerUsuarioActual(usuario));
+        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
+
+        Aula aula = aulaServicio.encontrarAula(id);
+        if (aula == null) {
+            return "redirect:/"; // Si no se encuentra, redirige a una página de error
+        }
+
+        model.addAttribute("aula", aula);
+        List<Archivos> archivos = pdfService.getArchivos(id);
+        model.addAttribute("archivos", archivos);  // Asegúrate de pasar 'archivos' aquí
+        model.addAttribute("id_aula", id); // Pasar también el 'id_aula' si es necesario
+
+        return "aulas/participantes"; // Cargar la vista correcta
+    }
+
+
 
 }

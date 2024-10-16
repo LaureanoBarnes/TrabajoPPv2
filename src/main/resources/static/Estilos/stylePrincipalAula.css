@@ -1,0 +1,325 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    height: 100%;
+    color: #ffeb3b;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: url('https://www.getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+.top-aside {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.school-icon {
+    width: 32px;
+    height: 32px;
+    filter: invert(84%) sepia(96%) saturate(325%) hue-rotate(3deg) brightness(108%) contrast(101%);
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    color: #ffeb3b;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    width: 180px;
+    overflow: hidden;
+    z-index: 1001;
+}
+
+.profile-dropdown.show {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+body.dark-mode .profile-dropdown {
+    background: #333;
+}
+body.dark-mode .dropdown-content a:hover {
+    background-color: #444;
+}
+
+body.dark-mode .dropdown-content a,
+body.dark-mode .dropdown-item {
+    color: #ffd700; /* Amarillo */
+}
+
+body.dark-mode .dropdown-content a {
+    color: #ffeb3b;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: #f0f0f0;
+}
+
+.dropdown-item i {
+    margin-right: 0.5rem;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+    position: relative;
+    z-index: 10;
+}
+
+.left-aside {
+    width: 250px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ffeb3b;
+    text-decoration: none;
+    padding: 0.75rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    color: #b3a32b;
+    margin-top: 0;
+    font-size: 1.75rem;
+    border-bottom: 2px solid #ffeb3b;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.news-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.news-item {
+    background: #fff9c4;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.news-item h3 {
+    color: #b3a32b;
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.news-item p {
+    color: #000000;
+    margin-bottom: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modo oscuro */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffeb3b;
+}
+
+body.dark-mode .card {
+    background: rgba(30, 30, 30, 0.9);
+}
+
+body.dark-mode .card h2 {
+    color: #ffeb3b;
+}
+body.dark-mode .news-item {
+    background: #2c2c2c;
+}
+body.dark-mode .news-item p {
+    color: #ffeb3b;
+    margin-bottom: 0;
+}
+
+
+
+body.dark-mode .news-item h3 {
+    color: #ffeb3b;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .left-aside {
+        width: 100%;
+        transform: translateX(-100%);
+        position: fixed;
+        top: 60px;
+        bottom: 0;
+        z-index: 20;
+    }
+
+    .left-aside.show {
+        transform: translateX(0);
+    }
+
+    main {
+        padding: 1rem;
+    }
+}
+
+/* Toggle para el modo oscuro */
+.dark-mode-toggle {
+    background: none;
+    border: none;
+    color: #ffeb3b;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Toggle para el menú en móviles */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #ffeb3b;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+}
+.home-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+}
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    .user-name {
+        display: inline;
+    }
+
+    .profile-button {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-img {
+        margin-top: 0.25rem;
+    }
+}

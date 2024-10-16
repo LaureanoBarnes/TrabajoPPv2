@@ -1,142 +1,115 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Nombre del Aula</title>
-    <link href="/Estilos/Stylesubirmaterial.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${aula.nombreAula}">Aula Virtual</title>
+    <link rel="stylesheet" href="/Estilos/Stylesubirmaterial.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<header>
-    <div class="icon-container">
-        <button class="icon-btn">
-            <a href="/" title="home">
-                <img src="https://www.svgrepo.com/show/404089/school.svg" class="home-img" alt="Home">
-            </a>
-        </button>
-    </div>
-    <div class="class-name">
-        <h1><span th:text="${aula.nombreAula}">Nombre del Aula</span></h1>
-    </div>
-    <div class="dropdown">
-        <span th:text="${nombreCompleto}">Username</span>
-        <button class="icon-btn">
-            <img src="https://www.svgrepo.com/show/512697/profile-1341.svg" class="profile-img" alt="Profile">
-        </button>
-        <div class="dropdown-content">
-            <a sec:href="@{/perfil}">Perfil</a>
-            <a href="/logout" onclick="this.parentNode.submit();">Desconectarse</a>
+<div class="container">
+    <aside class="top-aside">
+        <a href="/" class="logo">
+            <i data-lucide="school"></i>
+            <h1 th:text="${aula.nombreAula}">Nombre del Aula</h1>
+        </a>
+        <div class="user-info">
+            <span th:text="${nombreCompleto}">Nombre del Alumno</span>
+            <div class="profile-menu">
+                <i data-lucide="user" id="profile-icon"></i>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a sec:href="@{/perfil}" class="dropdown-item">
+                        <i data-lucide="user"></i>
+                        Perfil
+                    </a>
+                    <a href="/logout" onclick="this.parentNode.submit();" class="dropdown-item">
+                        <i data-lucide="log-out"></i>
+                        Desconectarse
+                    </a>
+                </div>
+            </div>
+            <button id="dark-mode-toggle" class="icon-button">
+                <i data-lucide="moon"></i>
+            </button>
         </div>
-    </div>
-</header>
+    </aside>
 
-<aside id="sidebar">
-    <ul>
-        <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}">Inicio</a></li>
-        <li><a href="/foro">Foro</a></li>
-        <li><a href="/materiales">Materiales</a></li>
-        <li><a href="/actividades">Actividades</a></li>
-        <li><a href="/participantes">Participantes</a></li>
-    </ul>
-</aside>
+    <div class="main-content">
+        <aside class="left-aside">
+            <nav>
+                <ul>
+                    <li><a th:href="@{/aula/{id}(id=${aula.id_aula})}"><i data-lucide="home"></i> Inicio</a></li>
+                    <li><a href="/foro"><i data-lucide="message-square"></i> Foro</a></li>
+                    <li><a href="/"><i data-lucide="activity"></i> Actividades</a></li>
+                    <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"
+                           data-page="participants"><i data-lucide="users"></i> <span> participantes</span></a></li>
+                </ul>
+            </nav>
+        </aside>
 
-<main>
-    <div class="upload-material">
-        <h1>Subir Material</h1>
-        <form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".pdf" required>
-            <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
-            <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
-            <button type="submit">Subir PDF</button>
-        </form>
-        <div th:if="${mensaje != null}"
-             th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">
-            <p th:text="${mensaje}"></p>
-        </div>
-
-        <div class="uploaded-files">
-            <h2>Archivos en <span th:text="${aula.nombreAula}">Nombre del Aula</span></h2>
-            <ul>
-                <li th:if="${archivos.size() == 0}">
-                    <p>No hay archivos subidos en esta aula.</p>
-                </li>
-                <li th:each="archivo : ${archivos}">
-                    <div class="file-item">
-                        <a target="_blank" th:href="@{${archivo.nombre}}" th:text="${archivo.nombre}">Descargar</a>
-                        <div class="icon-container">
-                            <button class="gear-btn" onclick="toggleOptions(this)">
-                                <img src="https://i.postimg.cc/dt165Ybp/gear-svgrepo-com-1.png" class="gear-img" alt="Opciones" width="15" height="15">
-                            </button>
+        <main>
+            <div id="materials-page" class="page">
+                <div class="card">
+                    <h2>Subir Material</h2>
+                    <form id="upload-form" class="upload-form" th:action="@{/api/archivo}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="file-input-wrapper">
+                            <label for="file-upload" class="file-input-label">
+                                <i data-lucide="upload"></i>
+                                <span>Seleccionar archivo</span>
+                            </label>
+                            <input id="file-upload" name="file" type="file" accept=".pdf" required>
+                            <span id="file-name">Ningún archivo seleccionado</span>
                         </div>
-                    <div class="options" style="display:none;">
-                        <form th:action="@{/archivo/eliminar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}"
-                              method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este archivo?');">
-                            <button type="submit">Eliminar</button>
-                        </form>
-                        <button type="button" th:onclick="'mostrarFormularioEditar(' + ${archivo.id} + ');'">Editar</button>
-                        <form th:attr="id='form-editar-' + ${archivo.id}"
-                              th:action="@{/archivo/editar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${id_aula})}"
-                              method="post" enctype="multipart/form-data" style="display:none;">
-                            <label for="file-[[${archivo.id}]]">Seleccionar archivo PDF:</label>
-                            <input type="file" id="file-[[${archivo.id}]]" name="file" accept=".pdf" required/>
-                            <button type="submit">Actualizar</button>
-                        </form>
-                    </div>
-                </li>
-            </ul>
-        </div>
+                        <input type="hidden" name="categoria" th:value="${aula.nombreAula}">
+                        <input type="hidden" name="aulaId" th:value="${aula.id_aula}">
+                        <button type="submit">Subir PDF</button>
+                    </form>
+                    <div id="upload-message" class="message" th:if="${mensaje != null}"
+                         th:classappend="${tipoMensaje == 'exito' ? 'success' : 'error'}"
+                         th:text="${mensaje}"></div>
+
+                    <h2>Archivos en <span th:text="${aula.nombreAula}">Nombre del Aula</span></h2>
+                    <ul id="material-list" class="material-list">
+                        <li th:if="${archivos.size() == 0}">
+                            <p>No hay archivos subidos en esta aula.</p>
+                        </li>
+                        <li th:each="archivo : ${archivos}" class="material-item">
+                            <a th:href="@{${archivo.nombre}}" th:text="${archivo.nombre}" target="_blank">Nombre del
+                                archivo</a>
+                            <div class="material-options" sec:authorize="hasRole('ROLE_ADMIN')">
+                                <button class="options-btn" th:attr="data-id=${archivo.id}">
+                                    <i data-lucide="settings"></i>
+                                </button>
+                                <div class="options-dropdown" th:id="'dropdown-' + ${archivo.id}">
+                                    <button class="edit-btn" th:attr="data-id=${archivo.id}"
+                                            th:onclick="'mostrarFormularioEditar(' + ${archivo.id} + ')'">
+                                        <i data-lucide="edit-2"></i> Editar
+                                    </button>
+                                    <form th:action="@{/archivo/eliminar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${aula.id_aula})}"
+                                          method="post"
+                                          onsubmit="return confirm('¿Seguro que deseas eliminar este archivo?');">
+                                        <button type="submit">
+                                            <i data-lucide="trash-2"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <form th:id="'form-editar-' + ${archivo.id}"
+                                  th:action="@{/archivo/editar/{archivoId}/{id_aula}(archivoId=${archivo.id}, id_aula=${aula.id_aula})}"
+                                  method="post" enctype="multipart/form-data" style="display:none;">
+                                <input type="file" th:id="'file-' + ${archivo.id}" name="file" accept=".pdf" required/>
+                                <button type="submit">Actualizar</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
     </div>
-</main>
+</div>
 
-<script>
-    function toggleOptions(button) {
-        // Busca el contenedor padre más cercano que tenga la clase 'file-item'
-        var fileItem = button.closest(".file-item");
-
-        // Dentro de ese contenedor, busca el div con la clase 'options'
-        var options = fileItem.querySelector(".options");
-
-        // Asegúrate de que el elemento 'options' existe antes de acceder a su estilo
-        if (options) {
-            if (options.style.display === "none" || options.style.display === "") {
-                options.style.display = "block";
-            } else {
-                options.style.display = "none";
-            }
-        } else {
-            console.error("No se encontró el contenedor de opciones para el archivo seleccionado.");
-        }
-    }
-
-    // Espera 3 segundos y luego oculta el mensaje
-    setTimeout(function () {
-        var mensajeDiv = document.getElementById("mensaje");
-        if (mensajeDiv) {
-            mensajeDiv.style.opacity = '0';
-            setTimeout(function () {
-                mensajeDiv.style.display = 'none';
-            }, 500); // Tiempo adicional para que la transición se complete
-        }
-    }, 3000); // 3 segundos
-
-    function mostrarFormularioEditar(archivoId) {
-        var form = document.getElementById("form-editar-" + archivoId);
-        if (form) {
-            if (form.style.display === "none" || form.style.display === "") {
-                form.style.display = "block"; // Mostrar el formulario
-            } else {
-                form.style.display = "none"; // Ocultar el formulario
-            }
-        }
-    }
-    // JavaScript para manejar el scroll
-    window.addEventListener("scroll", function() {
-        const sidebar = document.getElementById("sidebar");
-        if (window.scrollY > 0) {
-            sidebar.style.top = "0";
-        } else {
-            sidebar.style.top = "70px";
-        }
-    });
-</script>
-
+<script src="/Estilos/javascript/scriptSubirMaterial.js"></script>
 </body>
 </html>

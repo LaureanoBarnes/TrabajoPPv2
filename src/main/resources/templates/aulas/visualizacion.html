@@ -1,135 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<style>
-    .alert {
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        opacity: 1;
-        transition: opacity 0.5s ease-out;
-    }
-
-    .alert-success {
-        color: #3c763d;
-        background-color: #dff0d8;
-        border-color: #d6e9c6;
-    }
-
-    .alert-danger {
-        color: #a94442;
-        background-color: #f2dede;
-        border-color: #ebccd1;
-    }
-</style>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-
-    <title>Home Aula</title>
-    <link href="/Estilos/stylePrincipal.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Virtual</title>
+    <link rel="stylesheet" href="/Estilos/stylePrincipalAula.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<header>
-    <button>
-        <div>
-            <!-- Cambié el botón por un enlace -->
-            <a href="/" title="home">
-                <img src="https://www.svgrepo.com/show/404089/school.svg" class ="home-img">
-            </a>
+<div class="container">
+    <aside class="top-aside">
+        <a href="/" class="logo">
+            <img src="https://www.svgrepo.com/show/404089/school.svg" alt="School" class="school-icon">
+            <h1 th:text="${aula.nombreAula}">Nombre del Aula</h1>
+        </a>
+        <div class="user-info">
+            <span th:text="${nombreCompleto}">nombre del alumno</span>
+            <div class="profile-menu">
+                <button class="icon-button profile-button">
+                    <i data-lucide="user" id="profile-icon"></i>
+                </button>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a sec:href="@{/perfil}" class="dropdown-item">
+                        <i data-lucide="user"></i>
+                        Perfil
+                    </a>
+                    <a href="/logout" onclick="this.parentNode.submit();" class="dropdown-item">
+                        <i data-lucide="log-out"></i>
+                        Desconectarse
+                    </a>
+                </div>
+            </div>
+            <button class="dark-mode-toggle" id="dark-mode-toggle">
+                <i data-lucide="moon"></i>
+            </button>
+            <button class="menu-toggle" id="menu-toggle">
+                <i data-lucide="menu"></i>
+            </button>
         </div>
-    </button>
-    <div class="dropdown">
-        <span th:text="${nombreCompleto}"></span>
-        <button>
-            <img src="https://www.svgrepo.com/show/512697/profile-1341.svg" class="profile-img">
-        </button>
+    </aside>
 
-        <div class="dropdown-content">
-            <a sec:href="@{/perfil}">Perfil</a>
-            <a href="/logout" onclick="this.parentNode.submit();">desconectarse</a>
-        </div>
+    <div class="main-content">
+        <aside class="left-aside" id="left-aside">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="/" th:href="@{/}" class="menu-item">
+                            <i data-lucide="list"></i>
+                            <span>Listado de Aulas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="upload"></i>
+                            <span>Subir Material</span>
+                        </a>
+                    </li>
+                    <li><a href="/" class="menu-item"><i data-lucide="activity"></i><span>Actividades</span></a></li>
+                    <li>
+                        <a th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="message-square"></i>
+                            <span>Foro</span>
+                        </a>
+                    </li>
+                    <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"
+                           data-page="participants"><i data-lucide="users"></i> <span> participantes</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <div class="card">
+                <h2>Novedades del Aula</h2>
+                <ul class="news-list">
+                    <li class="news-item">
+                        <h3>Nueva tarea asignada</h3>
+                        <p>Se ha publicado una nueva tarea para la próxima semana.</p>
+                    </li>
+                    <li class="news-item">
+                        <h3>Próximo examen</h3>
+                        <p>Recuerda que el examen de mitad de curso es el próximo viernes.</p>
+                    </li>
+                </ul>
+            </div>
+        </main>
     </div>
-</header>
-<aside>
-    </div>
-        <ul>
-            <li>
-                <a href="/" th:href="@{/}">Volver a la lista de aulas</a>
-            </li>
-            <li>
-                <a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}">subir material</a>
-            </li>
-        </ul>
-</aside>
-<div class="info">
-    <a>
-        <h1>Bienvenido al Aula de <span th:text="${aula.nombreAula}"></span></h1>
-        <h1>Curso:<span th:text="${aula.cursoAula}"></span> </h1>
-        <h2>
-            Se ha agregado nuevas interfaces, iconos y modificado permisos especiales como:
-            <br>
-            * Accesos denegados a usuarios que no estan dentro de una aula
-            <br>
-            * Permisos de subir archivos
-            <br>
-            * Ahora solamente el admin correspondiente puede editar el aula creado
-
-
-        </h2>
-    </a>
-
-
-
 </div>
 
-<!--<h1>Aula: <span th:text="${aula.nombreAula}"></span></h1>-->
-<!--<p>Curso: <span th:text="${aula.cursoAula}"></span></p>-->
-
-
-<!--<h2>Administradores</h2>-->
-<!--<ul>-->
-<!--    <li th:each="admin : ${aula.administradores}">-->
-<!--        <span th:text="${admin.nombre} + ' ' + ${admin.apellido} + ' (' + ${admin.correo} + ') - ' + ${admin.unUsuario.unRol.nombre}"></span>-->
-<!--    </li>-->
-<!--</ul>-->
-
-<!--<h2>Usuarios</h2>-->
-<!--<ul>-->
-<!--    <li th:if="${aula.usuarios.size() == 0}">-->
-<!--        <p>No hay usuarios en esta aula.</p>-->
-<!--    </li>-->
-<!--    <li th:each="user : ${aula.usuarios}">-->
-<!--        <span th:text="${user.nombre} + ' ' + ${user.apellido} + ' (' + ${user.correo} + ') - ' + ${user.unUsuario.unRol.nombre}"></span>-->
-<!--    </li>-->
-<!--</ul>-->
-
-<!--<div th:if="${not #lists.contains(aula.usuarios, currentUser)}">-->
-<!--    <form th:action="@{/aula/{id_aula}/agregarUsuario(id_aula=${aula.id_aula})}" method="post" style="display:inline;">-->
-<!--        <input type="hidden" name="id_individuo" th:value="${currentUser.id_individuo}">-->
-<!--        <button type="submit">Unirse al Aula</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-<!--<div th:if="${#lists.contains(aula.usuarios, currentUser)}">-->
-<!--    <p>Ya eres miembro de esta aula.</p>-->
-<!--</div>-->
-<!--<div sec:authorize="hasRole('ROLE_ADMIN')">-->
-<!--    <h2>Subir archivo PDF</h2>-->
-<!--    <form th:action="@{/api/archivo}" method="post" enctype="multipart/form-data">-->
-<!--        <input type="file" name="file" accept=".pdf" required>-->
-<!--        <input type="hidden" name="categoria" th:value="${aula.nombreAula}">-->
-<!--        <input type="hidden" name="aulaId" th:value="${aula.id_aula}">-->
-<!--        <button type="submit">Subir PDF</button>-->
-<!--    </form>-->
-<!--    <div th:if="${mensaje != null}"-->
-<!--         th:classappend="${tipoMensaje == 'exito' ? 'alert alert-success' : 'alert alert-danger'}" id="mensaje">-->
-<!--        <p th:text="${mensaje}"></p>-->
-<!--    </div>-->
-<!--</div>-->
-
-
-
-
-
+<script src="/Estilos/javascript/scriptprincipal.js"></script>
 </body>
-</header>
 </html>

@@ -1,24 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Participantes del Aula</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Virtual</title>
+    <link rel="stylesheet" href="/Estilos/styleParticipante.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-icons@latest/dist/lucide.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<h1>Participantes del Aula: <span th:text="${aula.nombreAula}"></span></h1>
+<div class="container">
+    <header class="top-aside">
+        <a href="/" class="logo">
+            <img src="https://www.svgrepo.com/show/404089/school.svg" alt="School" class="school-icon">
+            <h1 th:text="${aula.nombreAula}">Nombre del Aula</h1>
+        </a>
+        <div class="user-controls">
+            <span th:text="${nombreCompleto}" class="user-name"></span>
+            <div class="dropdown profile-dropdown">
+                <button class="icon-button profile-button" aria-haspopup="true" aria-expanded="false">
+                    <i data-lucide="user" id="profile-icon"></i>
+                </button>
+                <div class="dropdown-content" id="profile-dropdown">
+                    <a sec:href="@{/perfil}" class="dropdown-item">Perfil</a>
+                    <a href="/logout" onclick="this.parentNode.submit();" class="dropdown-item">Desconectarse</a>
+                </div>
+            </div>
+            <button id="dark-mode-toggle" class="icon-button" aria-label="Toggle Dark Mode">
+                <i data-lucide="moon"></i>
+            </button>
+        </div>
+    </header>
 
-<h2>Administradores</h2>
-<ul>
-    <li th:each="admin : ${aula.administradores}">
-        <span th:text="${admin.nombre} + ' ' + ${admin.apellido} + ' (' + ${admin.correo} + ') - ' + ${admin.unUsuario.unRol.nombre}"></span>
-    </li>
-</ul>
+    <div class="main-content">
+        <aside class="left-aside">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="/" th:href="@{/}" class="menu-item">
+                            <i data-lucide="list"></i>
+                            <span>Listado de Aulas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="upload"></i>
+                            <span>Subir Material</span>
+                        </a>
+                    </li>
+                    <li><a href="/" class="menu-item"><i data-lucide="activity"></i><span>Actividades</span></a></li>
+                    <li><a href="#" data-page="forum" class="menu-item"><i
+                            data-lucide="message-square"></i><span>Foro</span></a></li>
+                    <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"
+                           data-page="participants"><i data-lucide="users"></i> <span> participantes</span></a></li>
+                </ul>
+            </nav>
+        </aside>
 
-<h2>Usuarios</h2>
-<ul>
-    <li th:each="user : ${aula.usuarios}">
-        <span th:text="${user.nombre} + ' ' + ${user.apellido} + ' (' + ${user.correo} + ') - ' + ${user.unUsuario.unRol.nombre}"></span>
-    </li>
-</ul>
+        <main id="main-content">
+            <div class="card">
+                <h2>Profesores</h2>
+                <div class="participant-list">
+                    <div class="participant-card" th:each="admin : ${aula.administradores}">
+                        <i data-lucide="user" size="40"></i>
+                        <div class="participant-info">
+                            <div class="participant-name" th:text="${admin.nombre} + ' ' + ${admin.apellido}"></div>
+                            <div class="participant-email" th:text="${admin.correo}"></div>
+                            <span class="participant-role" th:text="${admin.unUsuario.unRol.nombre}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Lista de Usuarios -->
+            <div class="card">
+                <h2>Alumnos</h2>
+                <div class="participant-list">
+                    <div class="participant-card" th:each="user : ${aula.usuarios}">
+                        <i data-lucide="user" size="40"></i>
+                        <div class="participant-info">
+                            <div class="participant-name" th:text="${user.nombre} + ' ' + ${user.apellido}"></div>
+                            <div class="participant-email" th:text="${user.correo}"></div>
+                            <span class="participant-role" th:text="${user.unUsuario.unRol.nombre}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 
+<script src="/Estilos/javascript/scriptParticipantes.js"></script>
 </body>
 </html>

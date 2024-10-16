@@ -36,17 +36,6 @@ public class UserController {
     private RolServicio rolServicio;
 
 
-//    @GetMapping("/")
-//    public String comienzo(Model model, @AuthenticationPrincipal User usuario) {
-//        List<Individuo> individuos = individuoServicio.listaindividuos();
-//
-//
-//        log.info("estoy ejecutando el controlador MVP");
-//        log.info("El usuario que ingreso es: " + usuario);
-//        model.addAttribute("individuos", individuos);
-//        return "indice";
-//    }
-
     @GetMapping("/anexar")
     public String anexar(Model model) {
         model.addAttribute("individuo", new Individuo());

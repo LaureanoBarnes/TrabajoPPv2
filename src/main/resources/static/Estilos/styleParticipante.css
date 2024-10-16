@@ -1,0 +1,341 @@
+/* General */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 16px;
+    height: 100%;
+    color: #ffeb3b;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Container */
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: url('https://www.getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+/* Header */
+.top-aside {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+.school-icon {
+    width: 32px;
+    height: 32px;
+    filter: invert(84%) sepia(96%) saturate(325%) hue-rotate(3deg) brightness(108%) contrast(101%);
+}
+.icon-button {
+    background: none;
+    border: none;
+    color: #ffeb3b;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    color: #ffeb3b;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.profile-img {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+}
+
+
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-menu {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+/* Dropdown */
+.dropdown-content {
+    display: none; /* Oculta el dropdown por defecto */
+    position: absolute; /* Posiciona el dropdown absolutamente */
+    right: 0; /* Alinea el dropdown a la derecha */
+    background-color: #fff; /* Fondo blanco para el dropdown */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar efecto de elevación */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+.dropdown-content.show {
+    display: block; /* Muestra el dropdown cuando tiene la clase 'show' */
+    animation: fadeIn 0.3s ease-out; /* Agrega animación al mostrar */
+}
+
+.profile-dropdown.show .dropdown-content{
+    display: block;
+}
+.profile-dropdown {
+    position: relative; /* Asegúrate de que sea relativo al contenedor */
+}
+
+
+
+.dropdown-item {
+    display: block; /* Asegura que el enlace ocupe todo el ancho */
+    padding: 0.75rem 1rem; /* Espaciado interno */
+    color: #333; /* Color de texto */
+    text-decoration: none; /* Sin subrayado */
+    transition: background-color 0.2s ease; /* Transición para el hover */
+}
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+/* Main Content */
+.main-content {
+    display: flex;
+    flex: 1;
+    position: relative;
+    z-index: 10;
+}
+
+.left-aside {
+    width: 250px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffeb3b;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.left-aside ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.left-aside li {
+    margin-bottom: 1rem;
+}
+
+.left-aside a {
+    color: #ffeb3b;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.left-aside a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.left-aside i {
+    margin-right: 0.5rem;
+}
+
+/* Main Area */
+main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    color: black;
+    font-size: 1.75rem;
+    border-bottom: 2px solid black;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.add-admin-btn, .add-admin-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.add-admin-btn i, .add-admin-form button i {
+    margin-right: 8px;
+}
+
+.add-admin-btn:hover, .add-admin-form button:hover {
+    background-color: #45a049;
+}
+
+/* Form */
+.add-admin-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.add-admin-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Participants */
+.participant-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    color: black;
+}
+
+.participant-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.participant-info {
+    margin-left: 1rem;
+}
+
+.participant-name {
+    font-weight: bold;
+}
+
+.participant-email {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.participant-role {
+    display: inline-block;
+    background-color: #e0e0e0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .left-aside {
+        width: 100%;
+        transform: translateX(-100%);
+        position: fixed;
+        top: 60px;
+        bottom: 0;
+        z-index: 20;
+    }
+
+    .left-aside.show {
+        transform: translateX(0);
+    }
+
+    main {
+        padding: 1rem;
+    }
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffeb3b;
+}
+
+body.dark-mode .card {
+    background: rgba(30, 30, 30, 0.9);
+}
+
+body.dark-mode .card h2 {
+    color: #ffeb3b;
+    border-bottom: 2px solid #ffeb3b;
+}
+
+
+body.dark-mode .dropdown-item {
+    color: #ffd700;
+}
+
+body.dark-mode .participant-card {
+    background-color: #2c2c2c;
+}
+body.dark-mode .participant-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    color: #ffeb3b;
+}
+body.dark-mode .participant-role{
+    background-color: #2c323c;
+}
+body.dark-mode .participant-email{
+    color: #ffeb3b;
+}
+body.dark-mode .dropdown-content{
+    background: black;
+}

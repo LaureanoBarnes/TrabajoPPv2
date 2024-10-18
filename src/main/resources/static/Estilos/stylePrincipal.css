@@ -258,12 +258,16 @@ body.dark-mode .dropdown-content a:hover {
     }
 
     .left-aside {
-        width: 100%;
-        transform: translateX(-100%);
+        width: 92%;
+        transform: translateY(-100%);
         position: fixed;
-        top: 60px;
-        bottom: 0;
-        z-index: 20;
+        align-content: center;
+        top: 0;
+        left: 0;
+        height: 100vh; /* Ocupa todo el alto de la pantalla */
+        z-index: 1200;
+        transition: transform 0.3s ease;
+        overflow-y: auto; /* Habilita el scroll si el contenido es muy grande */
     }
 
     .left-aside.show {

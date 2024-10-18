@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Virtual - Foros</title>
+    <link rel="stylesheet" href="/Estilos/styleForo.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="container">
+    <!-- Aside superior -->
+    <header class="top-aside">
+        <div class="left-section">
+            <a href="/" class="logo">
+                <i data-lucide="home"></i>
+                <h1 th:text="${aula.nombreAula}">Nombre de la Escuela</h1>
+            </a>
+        </div>
+        <div class="right-section">
+            <span class="student-name" th:text="${nombreCompleto}">Nombre del Alumno</span>
+            <div class="profile-menu">
+                <i data-lucide="user" id="profile-icon"></i>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="#" class="dropdown-item">
+                        <i data-lucide="user"></i>
+                        Perfil
+                    </a>
+                    <a href="/logout" onclick="this.parentNode.submit();" class="dropdown-item">
+                        <i data-lucide="log-out"></i>
+                        Desconectarse
+                    </a>
+                </div>
+            </div>
+            <button class="dark-mode-toggle" id="dark-mode-toggle">
+                <i data-lucide="moon"></i>
+            </button>
+            <!-- Botón del menú visible solo en móviles -->
+            <button class="menu-toggle" id="menu-toggle">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <!-- Aside lateral izquierdo -->
+        <aside class="left-aside" id="left-aside">
+            <nav>
+                <ul>
+                    <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}" class="menu-item"><i data-lucide="home"></i> Inicio</a>
+                    </li>
+                    <li><a href="/" data-page="activities" class="menu-item"><i data-lucide="activity"></i> Actividades</a></li>
+                    <li>
+                        <a href="/" th:href="@{/}" class="menu-item">
+                            <i data-lucide="list"></i>
+                            <span>Listado de Aulas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="upload"></i>
+                            <span>Subir Material</span>
+                        </a>
+                    </li>
+                    <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"
+                           data-page="participants"><i data-lucide="users"></i> <span> participantes</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main id="main-content">
+            <div class="forum-container">
+                <h2 class="section-title">Foros del Aula</h2>
+
+                <div class="create-forum">
+                    <h3>Crear Nuevo Foro</h3>
+                    <form th:action="@{/aula/{id_aula}/foro/crear(id_aula=${id_aula})}" method="post"
+                          id="create-forum-form">
+                        <input type="text" id="new-forum-title" name="titulo" placeholder="Título del Foro"
+                               maxlength="50" required>
+                        <textarea id="new-forum-description" name="descripcion" placeholder="Descripción del Foro"
+                                  maxlength="500" required></textarea>
+                        <button type="submit">
+                            <i data-lucide="plus"></i> Crear Foro
+                        </button>
+                    </form>
+                </div>
+
+                <div class="forum-list">
+                    <h3>Lista de Foros</h3>
+                    <ul id="forum-topics">
+                        <li th:each="foro : ${foros}">
+                            <a th:href="@{/aula/{id_aula}/foro/{foro_id}(id_aula=${id_aula}, foro_id=${foro.id})}">
+                                <i data-lucide="message-square"></i>
+                                <span th:text="${foro.titulo}">Foro Título</span>
+                            </a>
+                            <span class="topic-date"
+                                  th:text="'Creado el ' + ${#temporals.format(foro.fechaCreacion, 'yyyy-MM-dd')}">Fecha de Creación</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="/Estilos/javascript/scriptForo.js"></script>
+</body>
+</html>

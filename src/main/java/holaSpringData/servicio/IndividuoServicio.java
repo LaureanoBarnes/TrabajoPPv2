@@ -16,4 +16,5 @@ public interface IndividuoServicio {
     public Individuo localizarIndividuo(Individuo individuo);
 
     public Individuo findByNomusuario(String nomusuario);
+    Individuo encontrarPorId(Long id);
 }

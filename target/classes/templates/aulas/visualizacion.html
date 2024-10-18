@@ -60,10 +60,9 @@
                     </li>
                     <li><a href="/" class="menu-item"><i data-lucide="activity"></i><span>Actividades</span></a></li>
                     <li>
-                        <a th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item">
+                        <a href="/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item">
                             <i data-lucide="message-square"></i>
-                            <span>Foro</span>
-                        </a>
+                            <span>Foro</span></a>
                     </li>
                     <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"
                            data-page="participants"><i data-lucide="users"></i> <span> participantes</span></a></li>

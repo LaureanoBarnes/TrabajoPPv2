@@ -3,6 +3,8 @@ body, html {
     padding: 0;
     font-family: 'Arial', sans-serif;
     height: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
 }
 
 .container {
@@ -73,9 +75,9 @@ body, html {
     overflow: hidden;
     z-index: 1001;
 }
-
 .profile-dropdown.show {
     display: block;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .dropdown-item {
@@ -406,6 +408,7 @@ body.dark-mode .message.error {
     background-color: #b71c1c;
     color: #ef9a9a;
 }
+
 
 body.dark-mode .profile-dropdown,
 body.dark-mode .options-dropdown {

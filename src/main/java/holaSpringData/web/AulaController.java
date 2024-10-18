@@ -194,22 +194,6 @@ public class AulaController {
 
         return "aulas/visualizacion";
     }
-    @GetMapping("/aula/{id}/foro")
-    public String verForo(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User usuario) {
-        Aula aula = aulaServicio.encontrarAula(id);
-        if (aula == null) {
-            return "redirect:/"; // Redirige si el aula no existe
-        }
-
-        Individuo currentUser = individuoServicio.findByNomusuario(usuario.getUsername());
-        model.addAttribute("aula", aula);
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
-
-        // Añade cualquier lógica específica para cargar el foro de esta aula
-
-        return "aulas/foro"; // Asegúrate de tener la vista "foro.html"
-    }
 
     @GetMapping("/aula/{id}/subirmaterial")
     public String mostrarSubirMaterial(@PathVariable Long id, Model model, @AuthenticationPrincipal User usuario) {

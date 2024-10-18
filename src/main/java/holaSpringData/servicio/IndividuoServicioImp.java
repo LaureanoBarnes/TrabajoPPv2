@@ -5,6 +5,7 @@ import holaSpringData.clases.Individuo;
 import holaSpringData.dao.AulaDao;
 import holaSpringData.dao.IndividuoDao;
 import holaSpringData.dao.UsuarioDao;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,4 +59,9 @@ public class IndividuoServicioImp implements IndividuoServicio{
     }
 
 
+    @Override
+    public Individuo encontrarPorId(Long id) {
+        return individuoDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Individuo no encontrado con id: " + id));
+    }
 }

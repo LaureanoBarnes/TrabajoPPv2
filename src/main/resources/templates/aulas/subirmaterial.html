@@ -40,7 +40,18 @@
             <nav>
                 <ul>
                     <li><a th:href="@{/aula/{id}(id=${aula.id_aula})}"><i data-lucide="home"></i> Inicio</a></li>
-                    <li><a href="/foro"><i data-lucide="message-square"></i> Foro</a></li>
+                    <li>
+                        <a href="/" th:href="@{/}" class="menu-item">
+                            <i data-lucide="list"></i>
+                            <span>Listado de Aulas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="message-square"></i>
+                            <span>Foro</span>
+                        </a>
+                    </li>
                     <li><a href="/"><i data-lucide="activity"></i> Actividades</a></li>
                     <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"
                            data-page="participants"><i data-lucide="users"></i> <span> participantes</span></a></li>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Foro</title>
+    <link rel="stylesheet" href="/Estilos/styleDetalleForo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="container">
+    <!-- Aside superior con el logo, nombre del aula y perfil del usuario -->
+    <header class="top-header">
+        <a href="/" class="logo">
+            <img src="https://www.svgrepo.com/show/404089/school.svg" alt="School" class="school-icon">
+            <h1 th:text="${aula.nombreAula}">Nombre del Aula</h1>
+        </a>
+        <div class="user-info">
+            <span th:text="${nombreCompleto}">nombre del alumno</span>
+            <div class="profile-menu">
+                <button class="icon-button profile-button" id="profile-icon">
+                    <i data-lucide="user"></i>
+                </button>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a sec:href="@{/perfil}" class="dropdown-item">
+                        <i data-lucide="user"></i>
+                        Perfil
+                    </a>
+                    <a href="/logout" onclick="this.parentNode.submit();" class="dropdown-item">
+                        <i data-lucide="log-out"></i>
+                        Desconectarse
+                    </a>
+                </div>
+            </div>
+            <button class="dark-mode-toggle" id="dark-mode-toggle">
+                <i data-lucide="moon"></i>
+            </button>
+            <!-- Botón del menú visible solo en móviles -->
+            <button class="menu-toggle" id="menu-toggle">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Aside lateral y contenido principal del foro -->
+    <div class="main-content">
+        <aside class="left-aside" id="left-aside">
+            <nav>
+                <ul>
+                    <a th:href="@{/aula/{id}(id=${aula.id_aula})}"><i data-lucide="home"></i> Inicio</a></li>
+                    <li>
+                        <a href="/" th:href="@{/}" class="menu-item">
+                            <i data-lucide="list"></i>
+                            <span>Listado de Aulas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="upload"></i>
+                            <span>Subir Material</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" class="menu-item">
+                            <i data-lucide="activity"></i>
+                            <span>Actividades</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="message-square"></i>
+                            <span>Foro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item">
+                            <i data-lucide="users"></i>
+                            <span>Participantes</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <!-- Contenedor del foro centrado y más amplio -->
+            <div id="foro-container" th:data-id-aula="${id_aula}" th:data-id-foro="${foro.id}">
+                <h1 th:text="${foro.titulo}">Título del Foro</h1>
+                <p th:text="${foro.descripcion}">Descripción del Foro</p>
+
+                <!-- Formulario para agregar un nuevo mensaje -->
+                <div class="add-message-form">
+                    <h3>Agregar Mensaje</h3>
+                    <form th:action="@{/aula/{id_aula}/foro/{foro_id}/mensaje(id_aula=${id_aula}, foro_id=${foro.id})}" method="post">
+                        <textarea name="contenido" placeholder="Escribe tu mensaje..." maxlength="350" required></textarea>
+                        <button type="submit">Enviar</button>
+                    </form>
+                </div>
+
+                <!-- Lista de mensajes principales (solo aquellos sin mensaje padre) -->
+                <div id="mensajes-container" th:each="mensaje : ${foro.mensajes}">
+                    <div th:if="${mensaje.mensajePadre == null}">
+                        <div class="mensaje-principal">
+                            <p th:text="${mensaje.autor.nombre}">Autor</p>
+                            <p th:text="${mensaje.contenido}">Contenido del Mensaje</p>
+                            <small th:text="${#temporals.format(mensaje.fechaCreacion, 'yyyy-MM-dd HH:mm')}">Fecha</small>
+
+                            <!-- Elemento que muestra la cantidad de "Me gusta" -->
+                            <span th:id="'likes-count-' + ${mensaje.id}" class="likes-count" th:text="${mensaje.reacciones.size()}">0</span> Me gusta(s)
+                            <button class="btn-reaccion" th:data-id="${mensaje.id}">Me gusta</button>
+                            <button class="btn-responder" th:data-id="${mensaje.id}">Responder</button>
+
+                            <!-- Formulario de respuesta al mensaje principal -->
+                            <div th:id="'respuesta-' + ${mensaje.id}" class="respuesta-form" style="display:none;">
+                                <form th:action="@{/aula/{id_aula}/foro/{foro_id}/mensaje/{mensaje_id}/respuesta(id_aula=${id_aula}, foro_id=${foro.id}, mensaje_id=${mensaje.id})}" method="post">
+                                    <textarea name="contenido" placeholder="Escribe tu respuesta..." required></textarea>
+                                    <button type="submit">Responder</button>
+                                </form>
+                            </div>
+
+                            <!-- Lista de respuestas anidadas -->
+                            <div class="respuestas" th:if="${mensaje.respuestas != null}">
+                                <div th:each="respuesta : ${mensaje.respuestas}">
+                                    <div style="margin-left: 20px; padding: 5px; border-left: 2px solid #ddd;">
+                                        <p><strong th:text="${respuesta.autor.nombre}">Autor de la Respuesta</strong></p>
+                                        <p th:text="${respuesta.contenido}">Contenido de la Respuesta</p>
+                                        <small th:text="${#temporals.format(respuesta.fechaCreacion, 'yyyy-MM-dd HH:mm')}">Fecha</small>
+                                        <span th:id="'likes-count-' + ${respuesta.id}" class="likes-count" th:text="${respuesta.reacciones.size()}">0</span> Me gusta(s)
+                                        <button class="btn-reaccion" th:data-id="${respuesta.id}">Me gusta</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/Estilos/javascript/scriptDetalleForo.js"></script>
+</body>
+</html>

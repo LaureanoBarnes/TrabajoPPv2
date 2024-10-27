@@ -6,7 +6,6 @@ import holaSpringData.clases.Foro;
 import holaSpringData.clases.Individuo;
 import holaSpringData.clases.Mensaje;
 import holaSpringData.servicio.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,18 +20,21 @@ import java.time.LocalDateTime;
 @RequestMapping("/aula/{id_aula}/foro")
 public class ForoController {
 
-    @Autowired
-    private ForoServicio foroServicio;
+    private final ForoServicio foroServicio;
 
-    @Autowired
-    private MensajeServicio mensajeServicio;
-    @Autowired
-    private ReaccionServicioImpl reaccionServicioImpl;
-    @Autowired
-    private AulaServicio aulaServicio;
+    private final MensajeServicio mensajeServicio;
+    private final ReaccionServicioImpl reaccionServicioImpl;
+    private final AulaServicio aulaServicio;
 
-    @Autowired
-    private UsuarioAutenticacionServicio usuarioAutenticacionServicio;
+    private final UsuarioAutenticacionServicio usuarioAutenticacionServicio;
+
+    public ForoController(ForoServicio foroServicio, MensajeServicio mensajeServicio, ReaccionServicioImpl reaccionServicioImpl, AulaServicio aulaServicio, UsuarioAutenticacionServicio usuarioAutenticacionServicio) {
+        this.foroServicio = foroServicio;
+        this.mensajeServicio = mensajeServicio;
+        this.reaccionServicioImpl = reaccionServicioImpl;
+        this.aulaServicio = aulaServicio;
+        this.usuarioAutenticacionServicio = usuarioAutenticacionServicio;
+    }
 
     @GetMapping
     public String verForos(@PathVariable Long id_aula, Model model, @AuthenticationPrincipal User usuario) {
@@ -84,6 +86,26 @@ public class ForoController {
 
         return "aulas/detalleForo";  // Renderizar la vista 'detalleForo.html'
     }
+
+    @GetMapping("/{foro_id}/eliminar")
+    public String eliminarForo(@PathVariable Long id_aula, @PathVariable Long foro_id) {
+        foroServicio.eliminarForo(foro_id);
+        return "redirect:/aula/" + id_aula + "/foro";
+    }
+
+    @GetMapping("/{foro_id}/actualizar")
+    public String actualizarForo(@PathVariable Long id_aula, @PathVariable Long foro_id, Model model) {
+        Foro foro = foroServicio.encontrarForo(foro_id);
+        model.addAttribute("foro", foro);
+        return "aulas/actualizarForo";
+    }
+
+    @PostMapping("/{foro_id}/actualizar")
+    public String actualizarForo(@PathVariable Long id_aula, @PathVariable Long foro_id, @ModelAttribute Foro foro) {
+        foroServicio.actualizarForo(foro);
+        return "redirect:/aula/" + id_aula + "/foro";
+    }
+
 
 
 

@@ -99,4 +99,14 @@ public class ForoServicioImpl implements ForoServicio {
         reaccionServicio.reaccionar(mensajeId, individuoId, tipoReaccion);
     }
 
+    @Override
+    public void eliminarForo(Long foroId) {
+        foroDao.deleteById(foroId);
+    }
+
+    @Override
+    public Foro actualizarForo(Foro foro) {
+        return foroDao.save(foro);
+    }
+
 }

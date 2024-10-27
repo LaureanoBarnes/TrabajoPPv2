@@ -34,4 +34,8 @@ public interface ForoServicio {
     void eliminarMensaje(Long mensajeId);
 
     void reaccionarMensaje(Long mensajeId, Long individuoId, String tipoReaccion);
+
+    void eliminarForo(Long foroId);
+
+    Foro actualizarForo(Foro foro);
 }

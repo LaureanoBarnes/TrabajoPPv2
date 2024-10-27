@@ -21,17 +21,20 @@ import java.util.List;
 
 @Controller
 public class AulaController {
-    @Autowired
-    private PdfService pdfService;
+    private final PdfService pdfService;
 
-    @Autowired
-    private AulaServicio aulaServicio;
+    private final AulaServicio aulaServicio;
 
-    @Autowired
-    private IndividuoServicio individuoServicio;
+    private final IndividuoServicio individuoServicio;
 
-    @Autowired
-    private UsuarioAutenticacionServicio usuarioAutenticacionServicio;
+    private final UsuarioAutenticacionServicio usuarioAutenticacionServicio;
+
+    public AulaController(PdfService pdfService, AulaServicio aulaServicio, IndividuoServicio individuoServicio, UsuarioAutenticacionServicio usuarioAutenticacionServicio) {
+        this.pdfService = pdfService;
+        this.aulaServicio = aulaServicio;
+        this.individuoServicio = individuoServicio;
+        this.usuarioAutenticacionServicio = usuarioAutenticacionServicio;
+    }
 
 
     @GetMapping("/")

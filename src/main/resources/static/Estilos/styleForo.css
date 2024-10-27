@@ -169,7 +169,7 @@ main {
 }
 
 .create-forum, .forum-list {
-    background-color:rgba(0,0,0,0.7);
+    background-color:rgba(0,0,0,0.6);
 
     border-radius: 8px;
     padding: 1rem;
@@ -177,7 +177,7 @@ main {
 }
 
 .create-forum h3, .forum-list h3 {
-    color: black;
+    color: lightgoldenrodyellow;
     margin-bottom: 1rem;
 }
 
@@ -194,7 +194,6 @@ main {
 }
 
 #create-forum-form button {
-    background-color: rgba(151, 151, 151, 0.8);
     border: black;
     color: black;
     border: none;
@@ -233,7 +232,7 @@ main {
 }
 
 #forum-topics a {
-    color: #1a73e8;
+    color: lightgoldenrodyellow;
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -249,7 +248,7 @@ main {
 
 .topic-date {
     font-size: 0.8rem;
-    color: #666;
+    color: aliceblue;
     margin-left: 1.5rem;
 }
 
@@ -346,7 +345,7 @@ body.dark-mode .section-title {
 }
 
 body.dark-mode .topic-date {
-    color: #ffeb3b;
+    color: aliceblue;
 }
 
 body.dark-mode .create-forum h3, body.dark-mode .forum-list h3  {

@@ -2,6 +2,7 @@ package holaSpringData.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -15,7 +16,10 @@ import java.util.Locale;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-
+        @Bean
+        public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+            return new HiddenHttpMethodFilter();
+        }
 
     @Bean
     public LocaleResolver localeResolver(){

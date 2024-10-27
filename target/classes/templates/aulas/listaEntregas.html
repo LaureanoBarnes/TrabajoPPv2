@@ -1,0 +1,41 @@
+<!-- listaEntregas.html -->
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Entregas</title>
+    <link rel="stylesheet" href="/Estilos/estilos.css">
+</head>
+<body>
+
+
+<h1>Entregas de la Actividad: <span th:text="${actividad.titulo}"></span></h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Alumno</th>
+        <th>Fecha de Entrega</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entrega : ${entregas}">
+        <td th:text="${entrega.estudiante.nombreCompleto}"></td>
+        <td th:text="${entrega.fechaEntrega}"></td>
+        <td>
+            <span th:if="${entrega.estado == 'PENDIENTE'}" class="icono-pendiente">Pendiente</span>
+            <span th:if="${entrega.estado == 'EN_REVISION'}" class="icono-revision">En Revisión</span>
+            <span th:if="${entrega.estado == 'CALIFICADA'}" class="icono-calificada">Calificada</span>
+        </td>
+        <td>
+            <!-- Ver detalles de la entrega -->
+            <a th:href="@{/entregas/detalle/{id}(id=${entrega.id})}">Ver Detalles</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Actividades</title>
+    <link rel="stylesheet" href="/Estilos/styleListaActividades.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+</head>
+<body th:attr="data-id-aula=${id_aula}">
+
+<header>
+    <!-- Encabezado del aula -->
+    <div class="header-content">
+        <i class='bx bx-home-alt'></i>
+        <div class="header-title">
+            <h2 th:text="${aula.nombreAula}">Nombre del Aula</h2>
+        </div>
+        <div class="header-actions">
+            <span th:text="${nombreCompleto}" class="user-name"></span>
+            <div class="dropdown">
+                <button class="icon-button" id="profileButton">
+                    <i class='bx bx-user'></i>
+                </button>
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="#">Perfil</a>
+                    <a href="/logout" onclick="this.parentNode.submit();">Desconectarse</a>
+                </div>
+            </div>
+            <button class="icon-button" id="themeToggle">
+                <i class='bx bx-sun'></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <aside>
+        <nav>
+            <a href="#" class="nav-item"><i class='bx bx-book'></i><span>Actividades</span></a>
+            <a href="#" class="nav-item"><i class='bx bx-user'></i><span>Estudiantes</span></a>
+            <a href="#" class="nav-item"><i class='bx bx-calendar'></i><span>Calendario</span></a>
+            <a href="#" class="nav-item"><i class='bx bx-file'></i><span>Tareas</span></a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="card">
+            <div class="card-header">
+                <h2>Actividades del Aula</h2>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/aula/{id_aula}/actividades/crear(id_aula=${id_aula})}" class="upload-button">Crear Nueva Actividad</a>
+                </div>
+            </div>
+            <div class="card-content">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                        <th>Devolución</th>
+                    </tr>
+                    </thead>
+                    <tbody id="activityTableBody">
+                    <tr th:each="actividad : ${actividades}">
+                        <td>
+                            <a class="activity-link"
+                               th:attr="data-activity-id=${actividad.id},
+                                        data-activity-title=${actividad.titulo},
+                                        data-activity-description=${actividad.descripcion},
+                                        data-activity-file=${actividad.rutaArchivo},
+                                        data-activity-deadline=${actividad.plazoEntrega},
+                                        data-activity-entregado=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].archivoEntregado : ''}"
+                               onclick="openActivityModal(this)">
+                                <span th:text="${actividad.titulo}"></span>
+                            </a>
+                        </td>
+                        <td th:text="${actividad.descripcion}"></td>
+                        <td th:text="${actividad.plazoEntrega}"></td>
+                        <td th:text="${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].estado : 'Sin entrega'}"></td>
+                        <td>
+                            <a th:href="@{/aula/{id_aula}/actividades/{id_actividad}/entregas(id_aula=${aula.id_aula}, id_actividad=${actividad.id})}" sec:authorize="hasRole('ROLE_ADMIN')" title="Ver Detalles">
+                                <i class='bx bx-show'></i>
+                            </a>
+                            <a th:href="@{/aula/{id_aula}/actividades/{id_actividad}/editar(id_aula=${aula.id_aula}, id_actividad=${actividad.id})}" sec:authorize="hasRole('ROLE_ADMIN')" title="Editar">
+                                <i class='bx bx-edit-alt'></i>
+                            </a>
+                            <a href="#" sec:authorize="hasRole('ROLE_ADMIN')" onclick="deleteActivity(${actividad.id})" title="Eliminar">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+
+                        <td>
+                            <i class='bx bx-pencil'
+                               onclick="openFeedbackModal(this, '${actividad.id}')"
+                               th:attr="data-feedback-file=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].archivoEntregado : ''},
+            data-feedback-date=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].fechaEntrega : ''},
+            data-feedback-grade=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].calificacion : ''},
+            data-feedback-text=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].feedback : ''}"
+                               title="Feedback">
+                            </i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal para Detalles de Actividad -->
+<div class="modal" id="activityModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Detalles de Actividad</h3>
+            <button class="close-button" onclick="closeModal('activityModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h4 id="activityTitle"></h4>
+            <p><strong>Descripción:</strong> <span id="activityDescription"></span></p>
+            <p><strong>Plazo de Entrega:</strong> <span id="activityDeadline"></span></p>
+            <p><strong>Archivo:</strong> <a id="activityFile" href="#" target="_blank">Abrir</a></p>
+
+            <!-- Mostrar estado de entrega -->
+            <div id="entregaStatus">
+                <p><strong>Entrega:</strong>
+                    <a id="entregaMessage" href="#" target="_blank">
+                        <i class='bx bx-file'></i> <!-- Ícono de archivo -->
+                    </a>
+                </p>
+            </div>
+
+            <!-- Formulario de entrega -->
+            <div id="deliveryFormContainer">
+                <h3>Subir Entrega</h3>
+                <p id="expiredMessage" style="color: red; display: none;">El tiempo de entrega ha expirado.</p>
+                <form id="deliveryForm" method="post" enctype="multipart/form-data">
+                    <label for="archivoEntregado">Seleccionar archivo:</label>
+                    <input type="file" name="archivoEntregado" id="archivoEntregado" accept=".pdf" required />
+                    <button type="submit">Subir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Feedback de Actividad -->
+<div class="modal" id="feedbackModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Feedback de Actividad</h3>
+            <button class="close-button" onclick="closeModal('feedbackModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p><strong>Archivo Entregado:</strong>
+                <a id="feedbackFile" href="#" target="_blank">
+                    <i class='bx bx-file'></i> <!-- Ícono de archivo -->
+                </a>
+            </p>
+            <p><strong>Fecha de Entrega:</strong> <span id="feedbackDate"></span></p>
+            <p><strong>Calificación:</strong> <span id="feedbackGrade"></span></p>
+            <p><strong>Feedback:</strong> <span id="feedbackText" class="feedback-text"></span></p>
+        </div>
+    </div>
+</div>
+
+<script src="/Estilos/javascript/scriptListaActividades.js"></script>
+<script>
+    // Inicializar íconos de Lucide
+    lucide.createIcons();
+</script>
+</body>
+</html>

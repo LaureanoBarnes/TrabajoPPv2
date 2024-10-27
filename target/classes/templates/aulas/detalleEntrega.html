@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Entregas</title>
+    <link rel="stylesheet" href="/Estilos/styleDetalleEntrega.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body th:attr="data-id-aula=${id_aula}, data-id-actividad=${id_actividad}">
+
+<header>
+    <div class="header-content">
+        <i class='bx bx-home-alt'></i>
+        <div class="header-title">
+            <h2 th:text="${aula.nombreAula}">Nombre del Aula</h2>
+        </div>
+        <div class="header-actions">
+            <span th:text="${nombreCompleto}" class="user-name"></span>
+            <div class="dropdown">
+                <button class="icon-button" id="profileButton">
+                    <i class='bx bx-user'></i>
+                </button>
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="#">Perfil</a>
+                    <a href="/logout" onclick="this.parentNode.submit();">Desconectarse</a>
+                </div>
+            </div>
+            <button class="icon-button" id="themeToggle">
+                <i class='bx bx-sun'></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <aside>
+        <nav>
+            <a href ="/" th:href="@{'/aula/' + ${id_aula} + '/actividades'}" class="nav-item">
+                <i class='bx bx-book'></i>
+                <span>actividades</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class='bx bx-user'></i>
+                <span>Estudiantes</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class='bx bx-calendar'></i>
+                <span>Calendario</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class='bx bx-file'></i>
+                <span>Tareas</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="card">
+            <div class="card-header">
+                <h2>Entregas de la Actividad: <span th:text="${actividad.titulo}"></span></h2>
+                <p>Gestiona las entregas y calificaciones de los estudiantes</p>
+            </div>
+            <div class="card-content">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Archivo</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Estado</th>
+                        <th>Calificación</th>
+                        <th>Feedback</th>
+                    </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                    <tr th:each="entrega : ${entregas}">
+                        <td>
+                            <a class="student-link"
+                               th:attr="data-student-id=${entrega.id},
+                                        data-student-name=${entrega.individuo.nombreCompleto},
+                                        data-status=${entrega.estado},
+                                        data-grade=${entrega.calificacion},
+                                        data-feedback=${entrega.feedback != null ? entrega.feedback : ''}"
+                               onclick="openGradeModal(this)">
+                                <span th:text="${entrega.individuo.nombreCompleto}"></span>
+                            </a>
+                        </td>
+                        <td><a th:href="@{'/upload/' + ${entrega.archivoEntregado}}" th:text="${entrega.archivoEntregado}"></a></td>
+                        <td th:text="${entrega.fechaEntrega}"></td>
+                        <td th:text="${entrega.estado}"></td>
+                        <td th:text="${entrega.calificacion != 0 ? entrega.calificacion : 'Sin calificar'}"></td>
+                        <td th:text="${entrega.feedback != null ? entrega.feedback : 'Sin feedback'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal" id="gradeModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Calificar Estudiante</h3>
+            <button class="close-button">&times;</button>
+        </div>
+        <form id="gradeForm">
+            <div class="form-group">
+                <label for="studentName">Estudiante</label>
+                <input type="text" id="studentName" disabled>
+            </div>
+            <div class="form-group">
+                <label for="status">Estado</label>
+                <select id="status" name="status">
+                    <option value="APROBADO">Aprobado</option>
+                    <option value="DESAPROBADO">Desaprobado</option>
+                    <option value="REENVIAR">Reenviar</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="grade">Calificación</label>
+                <input type="number" id="grade" name="grade" min="1" max="10">
+            </div>
+            <div class="form-group">
+                <label for="feedback">Feedback</label>
+                <textarea id="feedback" name="feedback"></textarea>
+            </div>
+            <button type="submit" class="submit-button">Guardar Calificación</button>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/Estilos/javascript/scriptDetalleEntrega.js"></script>
+</body>
+</html>

@@ -91,10 +91,15 @@
                     <h3>Lista de Foros</h3>
                     <ul id="forum-topics">
                         <li th:each="foro : ${foros}">
+
                             <a th:href="@{/aula/{id_aula}/foro/{foro_id}(id_aula=${id_aula}, foro_id=${foro.id})}">
                                 <i data-lucide="message-square"></i>
                                 <span th:text="${foro.titulo}">Foro Título</span>
                             </a>
+                            <td>
+                                <a th:href="@{/aula/{id_aula}/foro/{foro_id}/eliminar(id_aula=${id_aula}, foro_id=${foro.id})}">Eliminar</a>
+                                <a th:href="@{/aula/{id_aula}/foro/{foro_id}/actualizar(id_aula=${id_aula}, foro_id=${foro.id})}">Actualizar</a>
+                            </td>
                             <span class="topic-date"
                                   th:text="'Creado el ' + ${#temporals.format(foro.fechaCreacion, 'yyyy-MM-dd')}">Fecha de Creación</span>
                         </li>

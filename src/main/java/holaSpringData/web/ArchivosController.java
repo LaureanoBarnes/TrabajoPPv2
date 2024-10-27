@@ -2,7 +2,6 @@ package holaSpringData.web;
 
 import holaSpringData.clases.Archivos;
 import holaSpringData.servicio.PdfService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class ArchivosController {
 
-    @Autowired
-    private PdfService pdfService;
+    private final PdfService pdfService;
+
+    public ArchivosController(PdfService pdfService) {
+        this.pdfService = pdfService;
+    }
 
     @PostMapping("/archivo")
     public RedirectView saveArchivos(

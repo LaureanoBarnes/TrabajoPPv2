@@ -26,14 +26,17 @@ import java.util.List;
 
 public class UserController {
 
-    @Autowired
-    private IndividuoServicio individuoServicio;
+    private final IndividuoServicio individuoServicio;
 
-    @Autowired
-    private UsuarioServicio usuarioServicio;
+    private final UsuarioServicio usuarioServicio;
     
-    @Autowired
-    private RolServicio rolServicio;
+    private final RolServicio rolServicio;
+
+    public UserController(IndividuoServicio individuoServicio, UsuarioServicio usuarioServicio, RolServicio rolServicio) {
+        this.individuoServicio = individuoServicio;
+        this.usuarioServicio = usuarioServicio;
+        this.rolServicio = rolServicio;
+    }
 
 
     @GetMapping("/anexar")

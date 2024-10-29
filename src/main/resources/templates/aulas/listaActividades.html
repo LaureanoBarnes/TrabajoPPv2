@@ -37,10 +37,13 @@
 <div class="container">
     <aside>
         <nav>
-            <a href="#" class="nav-item"><i class='bx bx-book'></i><span>Actividades</span></a>
-            <a href="#" class="nav-item"><i class='bx bx-user'></i><span>Estudiantes</span></a>
-            <a href="#" class="nav-item"><i class='bx bx-calendar'></i><span>Calendario</span></a>
-            <a href="#" class="nav-item"><i class='bx bx-file'></i><span>Tareas</span></a>
+            <ul>
+                <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-home"></i>Inicio</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-users"></i>Participantes</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/actividades(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-book"></i>Actividades</a></li>
+                <li><a href= "/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-message-square"></i>Foro</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-upload"></i>Materiales</a></li>
+            </ul>
         </nav>
     </aside>
 
@@ -69,11 +72,11 @@
                         <td>
                             <a class="activity-link"
                                th:attr="data-activity-id=${actividad.id},
-                                        data-activity-title=${actividad.titulo},
-                                        data-activity-description=${actividad.descripcion},
-                                        data-activity-file=${actividad.rutaArchivo},
-                                        data-activity-deadline=${actividad.plazoEntrega},
-                                        data-activity-entregado=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].archivoEntregado : ''}"
+                        data-activity-title=${actividad.titulo},
+                        data-activity-description=${actividad.descripcion},
+                        data-activity-file=${actividad.rutaArchivo},
+                        data-activity-deadline=${actividad.plazoEntrega},
+                        data-activity-entregado=${actividad.entregas != null && actividad.entregas.size() > 0 ? actividad.entregas[0].archivoEntregado : ''}"
                                onclick="openActivityModal(this)">
                                 <span th:text="${actividad.titulo}"></span>
                             </a>
@@ -88,7 +91,7 @@
                             <a th:href="@{/aula/{id_aula}/actividades/{id_actividad}/editar(id_aula=${aula.id_aula}, id_actividad=${actividad.id})}" sec:authorize="hasRole('ROLE_ADMIN')" title="Editar">
                                 <i class='bx bx-edit-alt'></i>
                             </a>
-                            <a href="#" sec:authorize="hasRole('ROLE_ADMIN')" onclick="deleteActivity(${actividad.id})" title="Eliminar">
+                            <a href="#" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="'deleteActivity(' + ${actividad.id} + ')'" title="Eliminar">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>

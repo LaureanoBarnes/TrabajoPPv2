@@ -39,33 +39,23 @@ public class EntregaActividadController {
 
     @GetMapping
     public String listarEntregas(@PathVariable Long id_aula, @PathVariable Long id_actividad, Model model, @AuthenticationPrincipal User usuario) {
-        // Busca la actividad por su ID
         Actividad actividad = actividadServicio.encontrarActividad(id_actividad);
-
-        // Si la actividad no se encuentra, manejar el error adecuadamente
-        if (actividad == null) {
-            // Manejo de error, redirigir a una página de error o lanzar una excepción
-            return "error/404";  // Por ejemplo, una página de error personalizada
-        }
         Aula aula = aulaServicio.encontrarAula(id_aula);
+        String nombreCompleto = usuarioAutenticacionServicio.obtenerNombreCompleto(usuario);
 
-        model.addAttribute("nombreCompleto", usuarioAutenticacionServicio.obtenerNombreCompleto(usuario));
+        if (actividad == null) {
+            return "error/404"; // Manejo de error
+        }
 
-        // Añadir la actividad al modelo
-        model.addAttribute("actividad", actividad);
-
-        // Añadir también otros atributos como la lista de entregas
         List<EntregaActividad> entregas = entregaActividadServicio.listarEntregasPorActividad(id_actividad);
-        if (entregas == null) {
-            entregas = new ArrayList<>();
-        }        model.addAttribute("entregas", entregas);
+        model.addAttribute("actividad", actividad);
+        model.addAttribute("entregas", entregas != null ? entregas : new ArrayList<>());
         model.addAttribute("id_aula", id_aula);
         model.addAttribute("id_actividad", id_actividad);
         model.addAttribute("aula", aula);
+        model.addAttribute("nombreCompleto", nombreCompleto); // Incluye el nombre completo del usuario
 
-
-
-        return "aulas/detalleEntrega";  // Reemplaza con el nombre correcto de tu vista
+        return "aulas/detalleEntrega";
     }
 
 

@@ -54,12 +54,18 @@ public class ActividadController {
         return "aulas/listaActividades";
     }
 
-    // Formulario de crear actividad
     @GetMapping("/crear")
-    public String mostrarFormularioCrear(@PathVariable Long id_aula, Model model) {
+    public String mostrarFormularioCrear(@PathVariable Long id_aula, Model model, @AuthenticationPrincipal User usuario) {
         logger.info("Mostrando formulario para crear actividad en el aula con id: {}", id_aula);
+
+        Aula aula = aulaServicio.encontrarAula(id_aula); // Recupera la información del aula
+        String nombreCompleto = usuarioAutenticacionServicio.obtenerNombreCompleto(usuario);
+
         model.addAttribute("actividad", new Actividad());
         model.addAttribute("id_aula", id_aula);
+        model.addAttribute("aula", aula); // Añade el aula al modelo para tener aula.nombreAula disponible
+        model.addAttribute("nombreCompleto", nombreCompleto); // Añade el nombre del usuario
+
         return "aulas/formularioActividad";
     }
 
@@ -86,10 +92,16 @@ public class ActividadController {
 
     // Mostrar formulario de edición
     @GetMapping("/{id_actividad}/editar")
-    public String mostrarFormularioEditar(@PathVariable Long id_aula, @PathVariable Long id_actividad, Model model) {
+    public String mostrarFormularioEditar(@PathVariable Long id_aula, @PathVariable Long id_actividad, Model model, @AuthenticationPrincipal User usuario) {
         Actividad actividad = actividadServicio.encontrarActividad(id_actividad);
+        Aula aula = aulaServicio.encontrarAula(id_aula); // Recupera la información del aula
+        String nombreCompleto = usuarioAutenticacionServicio.obtenerNombreCompleto(usuario);
+
         model.addAttribute("actividad", actividad);
         model.addAttribute("id_aula", id_aula);
+        model.addAttribute("aula", aula); // Añade el aula al modelo para tener aula.nombreAula disponible
+        model.addAttribute("nombreCompleto", nombreCompleto); // Añade el nombre del usuario
+
         return "aulas/formularioActividad";
     }
 

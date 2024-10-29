@@ -26,6 +26,8 @@ function toggleDropdown() {
 
 // Open Activity Modal
 function openActivityModal(element) {
+    const idAula = document.body.getAttribute('data-id-aula');
+    const idActividad = element.getAttribute('data-activity-id');
     const activityTitle = element.getAttribute('data-activity-title');
     const activityDescription = element.getAttribute('data-activity-description');
     const activityDeadline = element.getAttribute('data-activity-deadline');
@@ -37,31 +39,59 @@ function openActivityModal(element) {
     document.getElementById('activityDeadline').textContent = activityDeadline;
     document.getElementById('activityFile').href = activityFileUrl;
 
-    // Verifica si hay un archivo entregado para mostrar el ícono de entrega
     const entregaMessage = document.getElementById('entregaMessage');
     entregaMessage.style.display = activityEntregado ? 'inline' : 'none';
     entregaMessage.href = activityEntregado ? `/upload/${activityEntregado}` : '#';
 
-    // Verificar expiración de fecha de entrega
-    const deliveryFormContainer = document.getElementById('deliveryFormContainer');
-    const expiredMessage = document.getElementById('expiredMessage');
     const deliveryForm = document.getElementById('deliveryForm');
+    deliveryForm.setAttribute('data-activity-id', idActividad); // Almacena el ID de actividad
 
+    // Verifica la fecha límite para habilitar o deshabilitar la entrega
     const deadlineDate = new Date(activityDeadline);
     const currentDate = new Date();
+    const expiredMessage = document.getElementById('expiredMessage');
 
     if (currentDate > deadlineDate) {
-        // Fecha de entrega ha expirado
         deliveryForm.style.display = 'none';
         expiredMessage.style.display = 'block';
     } else {
-        // Fecha de entrega aún no expira
         deliveryForm.style.display = 'block';
         expiredMessage.style.display = 'none';
     }
 
     activityModal.classList.add('show');
 }
+
+function deleteActivity(id) {
+    const idAula = document.body.getAttribute('data-id-aula'); // Obtener id_aula del atributo de <body>
+    if (confirm("¿Está seguro de que desea eliminar esta actividad?")) {
+        fetch(`/aula/${idAula}/actividades/${id}/eliminar`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                // Eliminar la fila de actividad correspondiente del DOM
+                const activityRow = document.getElementById(`actividad-${id}`);
+                if (activityRow) {
+                    activityRow.remove();
+                }
+            }
+        }
+        );
+    }
+}
+// Configura el formulario de entrega para que use la URL de subida dinámica
+document.getElementById('deliveryForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita el envío predeterminado
+    const idAula = document.body.getAttribute('data-id-aula');
+    const idActividad = this.getAttribute('data-activity-id'); // Obtiene el ID de actividad desde el atributo
+
+    // Construye la URL de subida dinámica
+    const uploadUrl = `/aula/${idAula}/actividades/${idActividad}/entregas/subir`;
+    this.setAttribute('action', uploadUrl);
+
+    // Envía el formulario después de configurar la acción
+    this.submit();
+});
 
 // Open Feedback Modal
 function openFeedbackModal(element, activityId) {

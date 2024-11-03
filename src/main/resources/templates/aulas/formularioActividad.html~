@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${actividad.id != null ? 'Editar Actividad' : 'Crear Nueva Actividad'}">Formulario Actividad</title>
+    <link rel="stylesheet" href="/Estilos/styleFormularioActividad.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="header-left">
+        <a href="/" class="logo">
+            <i class='bx bx-home-alt'></i>
+            <h1 th:text="${aula.nombreAula}">Nombre del Aula</h1>
+        </a>
+    </div>
+    <div class="header-right">
+        <span class="user-menu" th:text="${nombreCompleto}">Nombre del Alumno</span>
+        <div class="dropdown">
+            <button class="user-menu-btn" id="userMenuBtn">
+                <i class='bx bx-user'></i>
+            </button>
+            <div class="dropdown-item text-red" id="userMenuDropdown">
+                <a href="#">Perfil</a>
+                <a href="/logout" onclick="this.parentNode.submit();">Desconectarse</a>
+            </div>
+        </div>
+        <button class="icon-button" id="themeToggle">
+            <i class='bx bx-sun'></i>
+        </button>
+    </div>
+</header>
+
+<!-- Barra lateral y contenido principal -->
+<div class="main-content">
+    <!-- Barra lateral izquierda -->
+    <aside class="left-aside">
+        <nav>
+            <ul>
+                <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-home'></i> Inicio</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-user'></i> Participantes</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/actividades(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-book'></i> Actividades</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-message-square'></i> Foro</a></li>
+                <li><a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-upload'></i> Materiales</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+<!-- Main Content -->
+<main class="main-content">
+    <div class="content-wrapper">
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="${actividad.id != null ? 'Editar Actividad' : 'Crear Nueva Actividad'}"></h2>
+            </div>
+            <div class="card-body">
+                <!-- Formulario de actividad -->
+                <form id="activityForm" class="activity-form"
+                      th:action="${actividad.id != null ? '/aula/' + id_aula + '/actividades/' + actividad.id + '/editar' : '/aula/' + id_aula + '/actividades/crear'}"
+                      method="post" enctype="multipart/form-data">
+
+                    <input type="hidden" name="_method" th:value="${actividad.id != null ? 'PUT' : 'POST'}">
+
+                    <div class="form-group">
+                        <label for="title">Título</label>
+                        <input type="text" id="title" name="titulo" th:value="${actividad.titulo}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Descripción</label>
+                        <textarea id="description" name="descripcion" rows="4" th:text="${actividad.descripcion}" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dueDate">
+                                <i data-lucide="calendar"></i>
+                                Fecha de entrega
+                            </label>
+                            <input type="datetime-local" id="dueDate" name="plazoEntrega" th:value="${fechaFormateada}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file">
+                            <i data-lucide="upload"></i>
+                            Archivo adjunto
+                        </label>
+                        <div id="dropZone" class="drop-zone">
+                            <input type="file" id="file" name="archivo" class="file-input">
+                            <div class="drop-zone-content">
+                                <i data-lucide="upload" class="upload-icon"></i>
+                                <div class="drop-zone-text">Arrastra y suelta tu archivo aquí o haz click para seleccionar</div>
+                                <p class="drop-zone-hint">PDF, DOC, DOCX hasta 10MB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" th:text="${actividad.id != null ? 'Actualizar' : 'Crear'}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="/Estilos/javascript/scriptFormularioActividad.js"></script>
+</body>
+</html>

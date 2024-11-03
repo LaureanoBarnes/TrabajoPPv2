@@ -40,17 +40,21 @@
                 <i class='bx bx-book'></i>
                 <span>actividades</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="nav-item">
                 <i class='bx bx-user'></i>
-                <span>Estudiantes</span>
+                <span>Participantes</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class='bx bx-calendar'></i>
-                <span>Calendario</span>
+            <a href="#" th:href="@{/aula/{id}/actividades(id=${aula.id_aula})}" class="nav-item">
+                <i class='bx bx-book'></i>
+                <span>Actividades</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class='bx bx-file'></i>
-                <span>Tareas</span>
+            <a href="#" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="nav-item">
+                <i class='bx bx-message-square'></i>
+                <span>Foro</span>
+            </a>
+            <a href="#" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="nav-item">
+                <i class='bx bx-upload'></i>
+                <span>Materiales</span>
             </a>
         </nav>
     </aside>
@@ -70,7 +74,6 @@
                         <th>Fecha de Entrega</th>
                         <th>Estado</th>
                         <th>Calificación</th>
-                        <th>Feedback</th>
                     </tr>
                     </thead>
                     <tbody id="studentsTableBody">
@@ -90,7 +93,6 @@
                         <td th:text="${entrega.fechaEntrega}"></td>
                         <td th:text="${entrega.estado}"></td>
                         <td th:text="${entrega.calificacion != 0 ? entrega.calificacion : 'Sin calificar'}"></td>
-                        <td th:text="${entrega.feedback != null ? entrega.feedback : 'Sin feedback'}"></td>
                     </tr>
                     </tbody>
                 </table>

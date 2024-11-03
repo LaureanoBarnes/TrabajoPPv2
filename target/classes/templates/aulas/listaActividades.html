@@ -9,15 +9,17 @@
 </head>
 <body th:attr="data-id-aula=${id_aula}">
 
-<header>
-    <!-- Encabezado del aula -->
-    <div class="header-content">
-        <i class='bx bx-home-alt'></i>
-        <div class="header-title">
-            <h2 th:text="${aula.nombreAula}">Nombre del Aula</h2>
+<div class="container">
+    <!-- Encabezado -->
+    <header class="top-aside">
+        <div class="left-section">
+            <a href="/" class="logo">
+                <i class='bx bx-home-alt'></i>
+                <h1 th:text="${aula.nombreAula}">Nombre del Aula</h1>
+            </a>
         </div>
-        <div class="header-actions">
-            <span th:text="${nombreCompleto}" class="user-name"></span>
+        <div class="right-section">
+            <span class="student-name" th:text="${nombreCompleto}">Nombre del Alumno</span>
             <div class="dropdown">
                 <button class="icon-button" id="profileButton">
                     <i class='bx bx-user'></i>
@@ -31,21 +33,22 @@
                 <i class='bx bx-sun'></i>
             </button>
         </div>
-    </div>
-</header>
+    </header>
 
-<div class="container">
-    <aside>
-        <nav>
-            <ul>
-                <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-home"></i>Inicio</a></li>
-                <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-users"></i>Participantes</a></li>
-                <li><a href="/" th:href="@{/aula/{id}/actividades(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-book"></i>Actividades</a></li>
-                <li><a href= "/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-message-square"></i>Foro</a></li>
-                <li><a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="nav-item"><i data-lucide="bx bx-upload"></i>Materiales</a></li>
-            </ul>
-        </nav>
-    </aside>
+    <!-- Barra lateral y contenido principal -->
+    <div class="main-content">
+        <!-- Barra lateral izquierda -->
+        <aside class="left-aside">
+            <nav>
+                <ul>
+                    <li><a href="/" th:href="@{/aula/{id}(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-home'></i> Inicio</a></li>
+                    <li><a href="/" th:href="@{/aula/{id}/participantes(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-user'></i> Participantes</a></li>
+                    <li><a href="/" th:href="@{/aula/{id}/actividades(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-book'></i> Actividades</a></li>
+                    <li><a href="/" th:href="@{/aula/{id}/foro(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-message-square'></i> Foro</a></li>
+                    <li><a href="/" th:href="@{/aula/{id}/subirmaterial(id=${aula.id_aula})}" class="menu-item"><i class='bx bx-upload'></i> Materiales</a></li>
+                </ul>
+            </nav>
+        </aside>
 
     <main>
         <div class="card">
@@ -148,6 +151,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal para Feedback de Actividad -->
